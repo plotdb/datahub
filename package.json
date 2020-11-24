@@ -3,7 +3,9 @@
   "name": "@loadingio/datahub",
   "license": "MIT",
   "main": "dist/datahub.js",
-  "files": [ "dist/**/*" ],
+  "files": [
+    "dist/**/*"
+  ],
   "description": "access scoped data via piped operational transformation",
   "version": "0.0.1",
   "homepage": "https://github.com/plotdb/datahub",
@@ -36,7 +38,7 @@
     "livescript": ">=1.6.0",
     "sharedb": "^1.0.0",
     "sharedb-wrapper": "github:zbryikt/sharedb-wrapper",
-    "template": "github:zbryikt/template#v2.1.4",
+    "template": "github:zbryikt/template#v2.1.5",
     "ot-json0": "github:ottypes/json0",
     "utf-8-validate": "^5.0.2"
   },
@@ -46,7 +48,7 @@
       "sharedb-wrapper",
       "bootstrap",
       "bootstrap.ldui",
-      "ldCover",
+      "ldcover",
       "@loadingio/ldquery",
       "ldview",
       "bootstrap.native",

@@ -5,7 +5,7 @@ services:
    ports:
      - 5100:5100
   nginx:
-    image: "datahub-postgres:latest"
+    image: "datahub-db:latest"
     ports:
       - 15432:5432
 
