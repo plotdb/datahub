@@ -61,6 +61,17 @@ Sharehub provides a simple interface and implementation reference for adopting S
 Sharehub is in a standalone JS file. include `sharehub.js` if you want to use it.
 
 
+## Scoping
+
+Passing `scope` option ( an array of strings / numbers ) into datahub constructor to filter incoming op and data based on the specified scope. For example, assume our data source keeps data in `datasrc` variable, then following hub:
+
+    new hub({scope: ["users", "deleted"]})
+
+will only pass ops that affect object in `datasrc.users.deleted`. Furthermore, data get from this hub will only be the subtree in `datasrc.users.deleted`.
+
+You can pipe data source to a hub that is scoped, and pipe this scoped hub to the destination hubs that use the same subtree.
+
+
 ## License
 
 MIT
