@@ -1,0 +1,62 @@
+{
+  "author": "zbryikt",
+  "name": "@loadingio/datahub",
+  "license": "MIT",
+  "main": "dist/datahub.js",
+  "files": [ "dist/**/*" ],
+  "description": "access scoped data via piped operational transformation",
+  "version": "0.0.1",
+  "homepage": "https://github.com/plotdb/datahub",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/plotdb/datahub"
+  },
+  "engines": {
+    "node": ">=10.14.1",
+    "npm": ">=6.4.1"
+  },
+  "scripts": {
+    "postinstall": "npx fedep",
+    "start": "./node_modules/.bin/lsc ./tool/server.ls"
+  },
+  "devDependencies": {
+    "express": "^4.17.1",
+    "colors": "^1.4.0",
+    "@loadingio/ldquery": "^1.1.0",
+    "bootstrap.build": "github:plotdb/bootstrap.build",
+    "bootstrap.ldui": "github:loadingio/bootstrap.ldui",
+    "bootstrap.native": "^3.0.13",
+    "bufferutil": "^4.0.1",
+    "fedep": "0.0.7",
+    "@loadingio/debounce.js": "0.0.1",
+    "ldloader": "^1.0.0",
+    "ldcover": "github:loadingio/ldCover",
+    "ldiconfont": "github:loadingio/ldiconfont",
+    "ldview": "0.0.2",
+    "livescript": ">=1.6.0",
+    "sharedb": "^1.0.0",
+    "sharedb-wrapper": "github:zbryikt/sharedb-wrapper",
+    "template": "github:zbryikt/template#v2.1.4",
+    "ot-json0": "github:ottypes/json0",
+    "utf-8-validate": "^5.0.2"
+  },
+  "frontendDependencies": {
+    "root": "web/static/assets/lib",
+    "modules": [
+      "sharedb-wrapper",
+      "bootstrap",
+      "bootstrap.ldui",
+      "ldCover",
+      "@loadingio/ldquery",
+      "ldview",
+      "bootstrap.native",
+      "ldloader",
+      "@loadingio/debounce.js",
+      "ldiconfont",
+      {
+        "name": "ot-json0",
+        "browserify": true
+      }
+    ]
+  }
+}

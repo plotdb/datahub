@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+mkdir -p dist
+echo "build src/datahub.ls -> dist/datahub.js ..."
+npx lsc -cbp src/datahub.ls > dist/datahub.js
+echo "minifying datahub.js ..."
+npx uglifyjs dist/datahub.js > dist/datahub.min.js
+
+echo "build src/sharehub.ls -> dist/sharehub.js ..."
+npx lsc -cbp src/sharehub.ls > dist/sharehub.js
+echo "minifying sharehub.js ..."
+npx uglifyjs dist/sharehub.js > dist/sharehub.min.js
+
+echo "Copy dist/ to web/ ..."
+mkdir -p web/static/assets/lib/datahub/dev
+cp -R dist/* web/static/assets/lib/datahub/dev/
+echo "done."
+

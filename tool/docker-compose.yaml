@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  web:
+   image: "datahub-backend:latest"
+   ports:
+     - 5100:5100
+  nginx:
+    image: "datahub-postgres:latest"
+    ports:
+      - 15432:5432
+

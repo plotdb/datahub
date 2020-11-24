@@ -1,0 +1,12 @@
+extends /base.pug
+block head
+block body
+  include /../../static/assets/lib/ldview/main/ldview.pug
+  .w-1024.rwd.mx-auto.my-4
+    .row
+      +scope("editor1").col-md
+        textarea.form-control(ld="input",rows="10")
+      +scope("editor2").col-md
+        textarea.form-control(ld="input",rows="10")
+block script
+  +script("/js/index.js")
