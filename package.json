@@ -1,13 +1,13 @@
 {
   "author": "zbryikt",
-  "name": "@loadingio/datahub",
+  "name": "@plotdb/datahub",
   "license": "MIT",
   "main": "dist/datahub.js",
   "files": [
     "dist/**/*"
   ],
   "description": "access scoped data via piped operational transformation",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/plotdb/datahub",
   "repository": {
     "type": "git",
