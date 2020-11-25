@@ -62,7 +62,17 @@ init = function(){
 mhub = false
   ? new datahub.mem()
   : new sharehub({
-    id: 'sample'
+    id: 'test2',
+    create: function(){
+      return {
+        textarea1: {
+          str: "hello"
+        },
+        textarea2: {
+          str: "world"
+        }
+      };
+    }
   });
 (mhub.init
   ? mhub.init()

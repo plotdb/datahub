@@ -34,6 +34,6 @@ init = ->
   #new editor root: '[ld-scope=editor4]', scope: <[textarea2]>
 
 mhub = if false => new datahub.mem!
-else new sharehub {id: \sample}
+else new sharehub {id: \test2, create: -> {textarea1: {str: "hello"}, textarea2: {str: "world"}}}
 (if mhub.init => mhub.init! else Promise.resolve!)
   .then -> init!
