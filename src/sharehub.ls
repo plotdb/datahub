@@ -20,9 +20,7 @@ sharehub = (opt={}) ->
 sharehub.prototype = {} <<< hub.src.prototype <<< do
   on: (n, cb) -> @evt-handler.[][n].push cb
   fire: (n, ...v) -> for cb in (@evt-handler[n] or []) => cb.apply @, v
-  watch: (ops,opt) ->
-    @ops-in JSON.parse(JSON.stringify(ops))
-
+  watch: (ops,opt) -> @ops-in JSON.parse(JSON.stringify(ops))
   init: ->
     Promise.resolve!
       .then ~>

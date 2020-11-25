@@ -13,7 +13,11 @@ editor = function(opt){
       return this$.view.render();
     }
   });
-  mhub.pipe(this.hub);
+  if (opt.hub) {
+    opt.hub.pipe(this.hub);
+  } else {
+    mhub.pipe(this.hub);
+  }
   this.value = this.hub.get() || {};
   this.view = new ldView({
     root: root,
@@ -48,6 +52,11 @@ editor = function(opt){
   return this;
 };
 init = function(){
+  var hub;
+  hub = new datahub({
+    scope: ['textarea2']
+  });
+  mhub.pipe(hub);
   new editor({
     name: "editor1",
     root: '[ld-scope=editor1]',
@@ -62,12 +71,12 @@ init = function(){
   new editor({
     name: "editor3",
     root: '[ld-scope=editor3]',
-    scope: ['textarea2']
+    hub: hub
   });
   return new editor({
     name: "editor4",
     root: '[ld-scope=editor4]',
-    scope: ['textarea2']
+    hub: hub
   });
 };
 mhub = false

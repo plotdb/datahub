@@ -9,7 +9,8 @@ editor = (opt={}) ->
     render: (ops) ~>
       @value = ot-json0.type.apply @value, ops
       @view.render!
-  mhub.pipe @hub
+  if opt.hub => opt.hub.pipe @hub
+  else mhub.pipe @hub
   @value = @hub.get! or {}
 
   @view = new ldView do
@@ -27,10 +28,12 @@ editor = (opt={}) ->
   @
 
 init = ->
+  hub = new datahub scope: <[textarea2]>
+  mhub.pipe hub
   new editor name: "editor1", root: '[ld-scope=editor1]', scope: [], raw: true
   new editor name: "editor2", root: '[ld-scope=editor2]', scope: <[textarea1]>
-  new editor name: "editor3", root: '[ld-scope=editor3]', scope: <[textarea2]>
-  new editor name: "editor4", root: '[ld-scope=editor4]', scope: <[textarea2]>
+  new editor name: "editor3", root: '[ld-scope=editor3]', hub: hub
+  new editor name: "editor4", root: '[ld-scope=editor4]', hub: hub
 
 mhub = if false => new datahub.mem!
 else new sharehub {id: \test2, create: -> {textarea1: {str: "hello"}, textarea2: {str: "world"}}}
