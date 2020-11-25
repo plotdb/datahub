@@ -41,7 +41,7 @@
     "ot-json0": "github:ottypes/json0",
     "sharedb": "^1.0.0",
     "sharedb-wrapper": "github:zbryikt/sharedb-wrapper",
-    "template": "github:zbryikt/template#v2.1.5",
+    "template": "github:zbryikt/template#v2.1.6",
     "uglifyify": "^5.0.2",
     "unassertify": "^2.1.1",
     "utf-8-validate": "^5.0.2"
