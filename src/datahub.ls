@@ -52,12 +52,13 @@ datahub.prototype = Object.create(Object.prototype) <<< do
     ops.map (op) ~>
       d = data
       p = []
+      # TODO support creationg of different type object
       for i from 0 til op.p.length - 1 =>
         p.push op.p[i]
-        if !d[op.p[i]] =>
-          ops-addon.push do
+        if !(d[op.p[i]]?) =>
+          ops-addon.push {
             p: JSON.parse(JSON.stringify(p))
-            oi: {} # Array?
+          } <<< if i == op.p.length - 1 and op.si => (si: "") else (oi: {})
         d = d[op.p[i]] or {}
     ops = ops-addon ++ ops
     return ops

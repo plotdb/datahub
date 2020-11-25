@@ -93,11 +93,16 @@
         for (i$ = 0, to$ = op.p.length - 1; i$ < to$; ++i$) {
           i = i$;
           p.push(op.p[i]);
-          if (!d[op.p[i]]) {
-            opsAddon.push({
-              p: JSON.parse(JSON.stringify(p)),
-              oi: {}
-            });
+          if (!(d[op.p[i]] != null)) {
+            opsAddon.push(import$({
+              p: JSON.parse(JSON.stringify(p))
+            }, i === op.p.length - 1 && op.si
+              ? {
+                si: ""
+              }
+              : {
+                oi: {}
+              }));
           }
           results$.push(d = d[op.p[i]] || {});
         }
