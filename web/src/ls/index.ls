@@ -6,7 +6,7 @@ editor = (opt={}) ->
   @opt = opt
   @root = root = ld$.find(opt.root, 0)
   @value = {}
-  @hub = new usrhub do
+  @hub = new datahub.usr do
     scope: <[textarea]>
     render: (ops) ~>
       @value = @hub.get!
@@ -29,7 +29,7 @@ init = ->
   new editor root: '[ld-scope=editor1]' 
   new editor root: '[ld-scope=editor2]' 
 
-mhub = if false => new memhub!
+mhub = if false => new datahub.mem!
 else new sharehub {id: \sample}
 (if mhub.init => mhub.init! else Promise.resolve!)
   .then -> init!

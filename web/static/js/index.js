@@ -8,7 +8,7 @@ editor = function(opt){
   this.opt = opt;
   this.root = root = ld$.find(opt.root, 0);
   this.value = {};
-  this.hub = new usrhub({
+  this.hub = new datahub.usr({
     scope: ['textarea'],
     render: function(ops){
       this$.value = this$.hub.get();
@@ -50,7 +50,7 @@ init = function(){
   });
 };
 mhub = false
-  ? new memhub()
+  ? new datahub.mem()
   : new sharehub({
     id: 'sample'
   });

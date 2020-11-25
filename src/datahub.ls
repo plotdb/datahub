@@ -1,4 +1,4 @@
-datahub = (opt = {}) ->
+datahub = hub = (opt = {}) ->
   @opt = opt
   @scope = opt.scope or [] # filter op and data to this scope
   # tree-like structure - single source, multi-subscriber
@@ -99,3 +99,8 @@ usrhub = (opt = {}) ->
       opt.render ops
   @
 usrhub.prototype = {} <<< deshub.prototype
+
+hub <<< {src: srchub, des: deshub, mem: memhub, usr: usrhub}
+
+if module? => module.exports = hub
+else if window? => window.datahub = hub

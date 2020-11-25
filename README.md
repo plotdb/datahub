@@ -5,17 +5,19 @@ Access *scoped* data via *piped* *operational transformation*.
 
 ## Usage
 
+after including `datahub.js`:
+
     # this is our data source.
-    src = new srchub do
+    src = new datahub.src do
       ops-out: (ops) -> # update data src by incoming ops
       get: -> # return complete data. always return cloned data to prevent user from touching original data
 
     # this is our view controller
-    des = new deshub do
+    des = new datahub.des do
       ops-in (ops): -> # update ui / widget
 
     # data through pipe are scoped under "my-view"
-    view-hub = new hub {scope: ["my-view"]}
+    view-hub = new datahub {scope: ["my-view"]}
     # ... from srchub / through view-hub / to deshub
     src.pipe view-hub .pipe des
 
@@ -36,8 +38,8 @@ Datahub also provides auxiliary hubs for quickly trying and testing.
 
 A sample usage of `memhub` and `usrhub` as follows:
 
-    mhub = new memhub!
-    uhub = new usrhub {render: -> console.log('ok'); }
+    mhub = new datahub.mem!
+    uhub = new datahub.usr {render: -> console.log('ok'); }
     mhub.pipe uhub
     document.querySelector('textarea').addEventListener \input, ->
       uhub.ops-out [
@@ -49,7 +51,7 @@ A sample usage of `memhub` and `usrhub` as follows:
 
 Sharehub provides a simple interface and implementation reference for adopting ShareDB with data hub to keep edited data in database:
 
-    uhub = new usrhub!
+    uhub = new datahub.usr!
     shub = new sharehub do
       render: -> # .. update ui ..
     shub.init({
