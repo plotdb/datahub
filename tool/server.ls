@@ -5,12 +5,12 @@ root = path.join(path.dirname(fs.realpathSync __filename.replace(/\(js\)$/,'')),
 
 config = do
   pg: do
-    uri: "postgres://pg:pg@localhost/pg"
+    uri: "postgres://pg:pg@#{process.env.DB_HOST or \localhost}/pg"
     database: "pg"
     user: "pg"
     password: "pg"
-    host: "localhost"
-    port: "15432"
+    host: "#{process.env.DB_HOST or \localhost}"
+    port: "#{process.env.DB_PORT or 15432}"
 
 server = do
   init: ->
