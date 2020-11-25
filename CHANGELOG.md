@@ -1,3 +1,12 @@
+# 0.0.5
+
+ - suppor doc creation base object in sharehub
+ - add warning when something been piped twice. remove `adopt` since we should keep track of source.
+ - bug fix: append obj creation op only if object doesn't exists (instead of check if value is true )
+ - bug fix: localize should clone ops. also fix localize logic.
+ - bug fix: we should apply changes to sharehub data when receiving incoming ops, but only if it's not source.
+
+
 # 0.0.4
 
  - build bundle js for datahub and sharehub

@@ -7,7 +7,7 @@
     "dist/**/*"
   ],
   "description": "access scoped data via piped operational transformation",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "homepage": "https://github.com/plotdb/datahub",
   "repository": {
     "type": "git",
