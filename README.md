@@ -5,7 +5,7 @@ Access *scoped* data via *piped* *operational transformation*.
 
 ## Usage
 
-after including `datahub.js`:
+after including `datahub.bundle.min.js`:
 
     # this is our data source.
     src = new datahub.src do
