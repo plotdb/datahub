@@ -1,4 +1,4 @@
-json0 = require("ot-json0")
+ot-json0 = require("ot-json0")
 json0-ot-diff = require("json0-ot-diff")
 diff-match-patch = require("diff-match-patch")
 

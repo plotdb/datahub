@@ -1,4 +1,9 @@
-hub = if require? => require("./datahub") else datahub
+try
+  hub = require("./datahub")
+  json0 = require("ot-json0")
+catch e
+  hub = datahub
+  json0 = ot-json0
 
 sharehub = (opt={}) ->
   @data = {}

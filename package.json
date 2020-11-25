@@ -22,24 +22,28 @@
     "start": "./node_modules/.bin/lsc ./tool/server.ls"
   },
   "devDependencies": {
-    "express": "^4.17.1",
-    "colors": "^1.4.0",
+    "@loadingio/debounce.js": "0.0.1",
     "@loadingio/ldquery": "^1.1.0",
     "bootstrap.build": "github:plotdb/bootstrap.build",
     "bootstrap.ldui": "github:loadingio/bootstrap.ldui",
     "bootstrap.native": "^3.0.13",
+    "browser-pack-flat": "^3.4.2",
     "bufferutil": "^4.0.1",
-    "fedep": "0.0.7",
-    "@loadingio/debounce.js": "0.0.1",
-    "ldloader": "^1.0.0",
+    "colors": "^1.4.0",
+    "envify": "^4.1.0",
+    "express": "^4.17.1",
+    "fedep": "0.0.8",
     "ldcover": "github:loadingio/ldCover",
     "ldiconfont": "github:loadingio/ldiconfont",
+    "ldloader": "^1.0.0",
     "ldview": "0.0.2",
     "livescript": ">=1.6.0",
+    "ot-json0": "github:ottypes/json0",
     "sharedb": "^1.0.0",
     "sharedb-wrapper": "github:zbryikt/sharedb-wrapper",
     "template": "github:zbryikt/template#v2.1.5",
-    "ot-json0": "github:ottypes/json0",
+    "uglifyify": "^5.0.2",
+    "unassertify": "^2.1.1",
     "utf-8-validate": "^5.0.2"
   },
   "frontendDependencies": {
@@ -57,7 +61,9 @@
       "ldiconfont",
       {
         "name": "ot-json0",
-        "browserify": true
+        "browserify": {
+          "standalone": "ot-json0"
+        }
       }
     ]
   }

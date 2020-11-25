@@ -1,3 +1,8 @@
+try
+  json0 = require("ot-json0")
+catch e
+  json0 = ot-json0
+
 datahub = hub = (opt = {}) ->
   @opt = opt
   @scope = opt.scope or [] # filter op and data to this scope
@@ -6,7 +11,6 @@ datahub = hub = (opt = {}) ->
   @subscriber = []
   (opt.subscriber or []).map ~> @pipe.push it
   @
-
 
 datahub.prototype = Object.create(Object.prototype) <<< do
   # this hub acts as data source. overwrite ops-out, get

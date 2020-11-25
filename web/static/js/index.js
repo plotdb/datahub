@@ -1,5 +1,5 @@
-var json0, json0OtDiff, diffMatchPatch, editor, init, mhub;
-json0 = require("ot-json0");
+var otJson0, json0OtDiff, diffMatchPatch, editor, init, mhub;
+otJson0 = require("ot-json0");
 json0OtDiff = require("json0-ot-diff");
 diffMatchPatch = require("diff-match-patch");
 editor = function(opt){
