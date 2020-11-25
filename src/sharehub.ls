@@ -8,6 +8,7 @@ catch e
 sharehub = (opt={}) ->
   @data = {}
   @id = opt.id or ''
+  @create = opt.create or null
   hub.src.call @, {} <<< opt <<< do
     ops-out: (ops) ~>
       @data = json0.type.apply @data, ops
@@ -22,7 +23,10 @@ sharehub.prototype = {} <<< hub.src.prototype <<< do
     Promise.resolve!
       .then ~>
         sdb = new sharedb-wrapper url: window.location.protocol.replace(\:,''), window.location.domain
-        sdb.get id: @id, watch: (...args) ~> @watch.apply @, args
+        sdb.get do
+          id: @id
+          create: if @create => (~> @create!) else null
+          watch: (...args) ~> @watch.apply @, args
       .then (doc) ~>
         @doc = doc
         @data = JSON.parse(JSON.stringify(@doc.data))

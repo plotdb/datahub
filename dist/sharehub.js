@@ -14,6 +14,7 @@
     opt == null && (opt = {});
     this.data = {};
     this.id = opt.id || '';
+    this.create = opt.create || null;
     hub.src.call(this, import$(import$({}, opt), {
       opsOut: function(ops){
         this$.data = json0.type.apply(this$.data, ops);
@@ -38,6 +39,9 @@
         }, window.location.domain);
         return sdb.get({
           id: this$.id,
+          create: this$.create ? function(){
+            return this$.create();
+          } : null,
           watch: function(){
             var args, res$, i$, to$;
             res$ = [];
