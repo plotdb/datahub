@@ -7,7 +7,7 @@ datahub = hub = (opt = {}) ->
   @opt = opt
   @scope = opt.scope or [] # filter op and data to this scope
   # tree-like structure - single source, multi-subscriber
-  @adopt opt.src
+  if opt.src => opt.src.pipe @
   @subscriber = []
   (opt.subscriber or []).map ~> @pipe.push it
   @
@@ -22,14 +22,17 @@ datahub.prototype = Object.create(Object.prototype) <<< do
   # this hub acts as dest hub. overwrite ops-in
   as-des: (o) -> @subscriber = [{ops-in: o.ops-in or (->)}]
 
-  # adopt data source
-  adopt: -> @src = it
-
   # pipe data to subhub ( as subscriber )
-  pipe: -> @subscriber.push it; it.adopt @; return it 
+  pipe: ->
+    if it.src =>
+      console.warn "a hub is connected with multiple source. cut the previous source anyway."
+      it.src.cut it
+    @subscriber.push it; it.src = @; return it
 
   # cut the pipe from this to subscriber
-  cut: -> if ~(idx = @subscriber.indexOf it) => @subscriber.splice idx, 1
+  cut: -> if ~(idx = @subscriber.indexOf it) =>
+    @subscriber.splice idx, 1
+    it.src = null
 
   # src -> des: tell des data is updating
   ops-in: (ops) ->
@@ -89,7 +92,7 @@ deshub.prototype = {} <<< datahub.prototype
 memhub = (opt = {}) ->
   @data = {}
   srchub.call @, {} <<< opt <<< do
-    ops-out: (ops) ~> 
+    ops-out: (ops) ~>
       @data = json0.type.apply @data, ops
       @ops-in ops
     get: ~> JSON.parse(JSON.stringify(@data))

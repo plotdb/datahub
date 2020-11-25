@@ -46,7 +46,6 @@
       return results$;
     },
     watch: function(ops, opt){
-      console.log(ops);
       return this.opsIn(JSON.parse(JSON.stringify(ops)));
     },
     init: function(){

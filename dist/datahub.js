@@ -12,7 +12,9 @@
     opt == null && (opt = {});
     this.opt = opt;
     this.scope = opt.scope || [];
-    this.adopt(opt.src);
+    if (opt.src) {
+      opt.src.pipe(this);
+    }
     this.subscriber = [];
     (opt.subscriber || []).map(function(it){
       return this$.pipe.push(it);
@@ -35,18 +37,20 @@
         opsIn: o.opsIn || function(){}
       }];
     },
-    adopt: function(it){
-      return this.src = it;
-    },
     pipe: function(it){
+      if (it.src) {
+        console.warn("a hub is connected with multiple source. cut the previous source anyway.");
+        it.src.cut(it);
+      }
       this.subscriber.push(it);
-      it.adopt(this);
+      it.src = this;
       return it;
     },
     cut: function(it){
       var idx;
       if (~(idx = this.subscriber.indexOf(it))) {
-        return this.subscriber.splice(idx, 1);
+        this.subscriber.splice(idx, 1);
+        return it.src = null;
       }
     },
     opsIn: function(ops){
