@@ -7,9 +7,8 @@ editor = function(opt){
   opt == null && (opt = {});
   this.opt = opt;
   this.root = root = ld$.find(opt.root, 0);
-  this.value = {};
   this.hub = new datahub.usr({
-    scope: ['textarea'],
+    scope: opt.scope || [],
     render: function(ops){
       this$.value = this$.hub.get();
       return this$.view.render();
@@ -24,9 +23,13 @@ editor = function(opt){
         input: function(arg$){
           var node, ops;
           node = arg$.node;
-          ops = json0OtDiff(this$.value, {
-            str: node.value
-          }, diffMatchPatch);
+          if (opt.raw) {
+            ops = json0OtDiff(this$.value, JSON.parse(node.value), diffMatchPatch);
+          } else {
+            ops = json0OtDiff(this$.value, {
+              str: node.value
+            }, diffMatchPatch);
+          }
           return this$.hub.opsOut(ops);
         }
       }
@@ -35,7 +38,11 @@ editor = function(opt){
       input: function(arg$){
         var node;
         node = arg$.node;
-        return node.value = this$.value.str || '';
+        if (opt.raw) {
+          return node.value = JSON.stringify(this$.value, null, 2);
+        } else {
+          return node.value = this$.value.str || '';
+        }
       }
     }
   });
@@ -43,10 +50,13 @@ editor = function(opt){
 };
 init = function(){
   new editor({
-    root: '[ld-scope=editor1]'
+    root: '[ld-scope=editor1]',
+    scope: [],
+    raw: true
   });
   return new editor({
-    root: '[ld-scope=editor2]'
+    root: '[ld-scope=editor2]',
+    scope: ['textarea1']
   });
 };
 mhub = false
