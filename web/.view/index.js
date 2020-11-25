@@ -165,18 +165,82 @@ pug_html = pug_html + "\u003Cdiv class=\"row\"\u003E";
 pug_mixins["scope"].call({
 block: function(){
 ;pug_debug_line = 8;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
-pug_html = pug_html + "\u003Ctextarea class=\"form-control\" ld=\"input\" rows=\"10\"\u003E\u003C\u002Ftextarea\u003E";
+pug_html = pug_html + "\u003Cdiv class=\"card\"\u003E";
+;pug_debug_line = 9;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "\u003Cdiv class=\"card-header p-2 text-sm\"\u003E";
+;pug_debug_line = 10;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "\u003Cb\u003E";
+;pug_debug_line = 10;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "datasrc\u003C\u002Fb\u003E";
+;pug_debug_line = 11;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "\u003Cdiv class=\"text-sm text-muted\"\u003E";
+;pug_debug_line = 11;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "keep json structure when editing this textarea.\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";
+;pug_debug_line = 12;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "\u003Ctextarea class=\"form-control rounded-0 border-0\" ld=\"input\" rows=\"15\"\u003E\u003C\u002Ftextarea\u003E\u003C\u002Fdiv\u003E";
 },
 attributes: {"class": "col-md"}
 }, "editor1");
-;pug_debug_line = 9;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+;pug_debug_line = 13;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
 pug_mixins["scope"].call({
 block: function(){
-;pug_debug_line = 10;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
-pug_html = pug_html + "\u003Ctextarea class=\"form-control\" ld=\"input\" rows=\"10\"\u003E\u003C\u002Ftextarea\u003E";
+;pug_debug_line = 14;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "\u003Cdiv class=\"card\"\u003E";
+;pug_debug_line = 15;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "\u003Cdiv class=\"card-header p-2 text-sm\"\u003E";
+;pug_debug_line = 16;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "\u003Cb\u003E";
+;pug_debug_line = 16;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "datasrc.textarea1\u003C\u002Fb\u003E";
+;pug_debug_line = 17;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "\u003Cdiv class=\"text-sm text-muted\"\u003E";
+;pug_debug_line = 17;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "string content of textarea1 member\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";
+;pug_debug_line = 18;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "\u003Ctextarea class=\"form-control rounded-0 border-0\" ld=\"input\" rows=\"15\"\u003E\u003C\u002Ftextarea\u003E\u003C\u002Fdiv\u003E";
 },
 attributes: {"class": "col-md"}
 }, "editor2");
+;pug_debug_line = 19;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_mixins["scope"].call({
+block: function(){
+;pug_debug_line = 20;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "\u003Cdiv class=\"card\"\u003E";
+;pug_debug_line = 21;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "\u003Cdiv class=\"card-header p-2 text-sm\"\u003E";
+;pug_debug_line = 22;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "\u003Cb\u003E";
+;pug_debug_line = 22;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "datasrc.textarea2\u003C\u002Fb\u003E";
+;pug_debug_line = 23;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "\u003Cdiv class=\"text-sm text-muted\"\u003E";
+;pug_debug_line = 23;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "string content of textarea2 member\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";
+;pug_debug_line = 24;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "\u003Ctextarea class=\"form-control rounded-0 border-0\" ld=\"input\" rows=\"15\"\u003E\u003C\u002Ftextarea\u003E\u003C\u002Fdiv\u003E";
+},
+attributes: {"class": "col-md"}
+}, "editor3");
+;pug_debug_line = 25;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_mixins["scope"].call({
+block: function(){
+;pug_debug_line = 26;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "\u003Cdiv class=\"card\"\u003E";
+;pug_debug_line = 27;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "\u003Cdiv class=\"card-header p-2 text-sm\"\u003E";
+;pug_debug_line = 28;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "\u003Cb\u003E";
+;pug_debug_line = 28;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "datasrc.textarea2\u003C\u002Fb\u003E";
+;pug_debug_line = 29;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "\u003Cdiv class=\"text-sm text-muted\"\u003E";
+;pug_debug_line = 29;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "string content of textarea2 member\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";
+;pug_debug_line = 30;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+pug_html = pug_html + "\u003Ctextarea class=\"form-control rounded-0 border-0\" ld=\"input\" rows=\"15\"\u003E\u003C\u002Ftextarea\u003E\u003C\u002Fdiv\u003E";
+},
+attributes: {"class": "col-md"}
+}, "editor4");
 pug_html = pug_html + "\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";
 ;pug_debug_line = 19;pug_debug_filename = "\u002FUsers\u002Ftkirby\u002Fworkspace\u002Fzbryikt\u002Fplotdb\u002Fprojects\u002Fdatahub\u002Fweb\u002Fsrc\u002Fpug\u002Fbase.pug";
 pug_mixins["script"]("assets/lib/ot-json0/main/ot-json0.js");
@@ -201,6 +265,6 @@ pug_mixins["script"]("assets/lib/ldview/main/ldview.min.js");
 ;pug_debug_line = 29;pug_debug_filename = "\u002FUsers\u002Ftkirby\u002Fworkspace\u002Fzbryikt\u002Fplotdb\u002Fprojects\u002Fdatahub\u002Fweb\u002Fsrc\u002Fpug\u002Fbase.pug";
 pug_mixins["script"]("assets/lib/sharedb-wrapper/main/client.bundle.min.js");
 ;pug_debug_line = 30;pug_debug_filename = "\u002FUsers\u002Ftkirby\u002Fworkspace\u002Fzbryikt\u002Fplotdb\u002Fprojects\u002Fdatahub\u002Fweb\u002Fsrc\u002Fpug\u002Fbase.pug";
-;pug_debug_line = 12;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
+;pug_debug_line = 33;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
 pug_mixins["script"]("/js/index.js");
 pug_html = pug_html + "\u003C\u002Fbody\u003E\u003C\u002Fhtml\u003E";}.call(this,"Array" in locals_for_with?locals_for_with.Array:typeof Array!=="undefined"?Array:undefined,"JSON" in locals_for_with?locals_for_with.JSON:typeof JSON!=="undefined"?JSON:undefined,"blockLoader" in locals_for_with?locals_for_with.blockLoader:typeof blockLoader!=="undefined"?blockLoader:undefined,"cssLoader" in locals_for_with?locals_for_with.cssLoader:typeof cssLoader!=="undefined"?cssLoader:undefined,"decache" in locals_for_with?locals_for_with.decache:typeof decache!=="undefined"?decache:undefined,"escape" in locals_for_with?locals_for_with.escape:typeof escape!=="undefined"?escape:undefined,"parentName" in locals_for_with?locals_for_with.parentName:typeof parentName!=="undefined"?parentName:undefined,"prefix" in locals_for_with?locals_for_with.prefix:typeof prefix!=="undefined"?prefix:undefined,"scriptLoader" in locals_for_with?locals_for_with.scriptLoader:typeof scriptLoader!=="undefined"?scriptLoader:undefined,"version" in locals_for_with?locals_for_with.version:typeof version!=="undefined"?version:undefined));} catch (err) {pug_rethrow(err, pug_debug_filename, pug_debug_line);};return pug_html;}; module.exports = template; })() 

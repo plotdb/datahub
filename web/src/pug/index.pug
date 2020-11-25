@@ -5,8 +5,29 @@ block body
   .w-1024.rwd.mx-auto.my-4
     .row
       +scope("editor1").col-md
-        textarea.form-control(ld="input",rows="10")
+        .card
+          .card-header.p-2.text-sm
+            b datasrc
+            .text-sm.text-muted keep json structure when editing this textarea.
+          textarea.form-control.rounded-0.border-0(ld="input",rows="15")
       +scope("editor2").col-md
-        textarea.form-control(ld="input",rows="10")
+        .card
+          .card-header.p-2.text-sm
+            b datasrc.textarea1
+            .text-sm.text-muted string content of textarea1 member
+          textarea.form-control.rounded-0.border-0(ld="input",rows="15")
+      +scope("editor3").col-md
+        .card
+          .card-header.p-2.text-sm
+            b datasrc.textarea2
+            .text-sm.text-muted string content of textarea2 member
+          textarea.form-control.rounded-0.border-0(ld="input",rows="15")
+      +scope("editor4").col-md
+        .card
+          .card-header.p-2.text-sm
+            b datasrc.textarea2
+            .text-sm.text-muted string content of textarea2 member
+          textarea.form-control.rounded-0.border-0(ld="input",rows="15")
+
 block script
   +script("/js/index.js")
