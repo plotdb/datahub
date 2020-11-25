@@ -1,3 +1,9 @@
+# 0.0.4
+
+ - build bundle js for datahub and sharehub
+ - support both bare mode and bundle mode.
+
+
 # 0.0.3
 
  - build all source without -bare option.
