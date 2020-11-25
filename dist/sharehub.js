@@ -46,6 +46,9 @@
       return results$;
     },
     watch: function(ops, opt){
+      if (!opt) {
+        this.data = json0.type.apply(this.data, ops);
+      }
       return this.opsIn(JSON.parse(JSON.stringify(ops)));
     },
     init: function(){

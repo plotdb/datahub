@@ -20,7 +20,11 @@ sharehub = (opt={}) ->
 sharehub.prototype = {} <<< hub.src.prototype <<< do
   on: (n, cb) -> @evt-handler.[][n].push cb
   fire: (n, ...v) -> for cb in (@evt-handler[n] or []) => cb.apply @, v
-  watch: (ops,opt) -> @ops-in JSON.parse(JSON.stringify(ops))
+  watch: (ops,src) ->
+    # apply ops only if not source.
+    # if we are src, it has been applied when before submitOp
+    if !src => @data = json0.type.apply @data, src
+    @ops-in JSON.parse(JSON.stringify(ops))
   init: ->
     Promise.resolve!
       .then ~>
