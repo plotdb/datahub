@@ -34,11 +34,11 @@ datahub.prototype = Object.create(Object.prototype) <<< do
   # src -> des: tell des data is updating
   ops-in: (ops) ->
     localize = (p, s) ->
-      for i from 0 to s.length => if p[i] != s[i] => break
-      p.slice i
-    if @scope => ops.map ~> it.p = localize(it.p, @scope)
-    ops = ops.filter -> it.p and it.p.length
-    @subscriber.map -> it.ops-in ops
+      for i from 0 til s.length => if p[i] != s[i] => return
+      p.slice i + 1
+    if @scope => ops = ops.map ~> {} <<< it <<< p: localize(it.p, @scope)
+    ops = ops.filter -> it.p?
+    if ops.length => @subscriber.map -> it.ops-in ops
 
   # des -> src: tell src to update data
   ops-out: (ops) ->

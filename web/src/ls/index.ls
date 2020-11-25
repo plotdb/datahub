@@ -1,4 +1,3 @@
-ot-json0 = require("ot-json0")
 json0-ot-diff = require("json0-ot-diff")
 diff-match-patch = require("diff-match-patch")
 
@@ -8,7 +7,7 @@ editor = (opt={}) ->
   @hub = new datahub.usr do
     scope: opt.scope or []
     render: (ops) ~>
-      @value = @hub.get!
+      @value = ot-json0.type.apply @value, ops
       @view.render!
   mhub.pipe @hub
   @value = @hub.get! or {}
@@ -28,10 +27,10 @@ editor = (opt={}) ->
   @
 
 init = ->
-  new editor root: '[ld-scope=editor1]', scope: [], raw: true
-  new editor root: '[ld-scope=editor2]', scope: <[textarea1]>
-  #new editor root: '[ld-scope=editor3]', scope: <[textarea2]>
-  #new editor root: '[ld-scope=editor4]', scope: <[textarea2]>
+  new editor name: "editor1", root: '[ld-scope=editor1]', scope: [], raw: true
+  new editor name: "editor2", root: '[ld-scope=editor2]', scope: <[textarea1]>
+  new editor name: "editor3", root: '[ld-scope=editor3]', scope: <[textarea2]>
+  new editor name: "editor4", root: '[ld-scope=editor4]', scope: <[textarea2]>
 
 mhub = if false => new datahub.mem!
 else new sharehub {id: \test2, create: -> {textarea1: {str: "hello"}, textarea2: {str: "world"}}}

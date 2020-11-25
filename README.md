@@ -52,13 +52,12 @@ A sample usage of `memhub` and `usrhub` as follows:
 Sharehub provides a simple interface and implementation reference for adopting ShareDB with data hub to keep edited data in database:
 
     uhub = new datahub.usr!
-    shub = new sharehub do
-      render: -> # .. update ui ..
-    shub.init({
+    shub = new sharehub({
       id: 'my-sharedb-doc-id'
+      create: -> {} # init obj if doc not found.
     })
-      .then ->
-        shub.pipe uhub
+    shub.init!
+      .then -> shub.pipe uhub
 
 Sharehub is in a standalone JS file. include `sharehub.js` if you want to use it.
 

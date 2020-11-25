@@ -1,5 +1,4 @@
-var otJson0, json0OtDiff, diffMatchPatch, editor, init, mhub;
-otJson0 = require("ot-json0");
+var json0OtDiff, diffMatchPatch, editor, init, mhub;
 json0OtDiff = require("json0-ot-diff");
 diffMatchPatch = require("diff-match-patch");
 editor = function(opt){
@@ -10,7 +9,7 @@ editor = function(opt){
   this.hub = new datahub.usr({
     scope: opt.scope || [],
     render: function(ops){
-      this$.value = this$.hub.get();
+      this$.value = otJson0.type.apply(this$.value, ops);
       return this$.view.render();
     }
   });
@@ -50,13 +49,25 @@ editor = function(opt){
 };
 init = function(){
   new editor({
+    name: "editor1",
     root: '[ld-scope=editor1]',
     scope: [],
     raw: true
   });
-  return new editor({
+  new editor({
+    name: "editor2",
     root: '[ld-scope=editor2]',
     scope: ['textarea1']
+  });
+  new editor({
+    name: "editor3",
+    root: '[ld-scope=editor3]',
+    scope: ['textarea2']
+  });
+  return new editor({
+    name: "editor4",
+    root: '[ld-scope=editor4]',
+    scope: ['textarea2']
   });
 };
 mhub = false

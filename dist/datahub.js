@@ -53,25 +53,28 @@
       var localize, this$ = this;
       localize = function(p, s){
         var i$, to$, i;
-        for (i$ = 0, to$ = s.length; i$ <= to$; ++i$) {
+        for (i$ = 0, to$ = s.length; i$ < to$; ++i$) {
           i = i$;
           if (p[i] !== s[i]) {
-            break;
+            return;
           }
         }
-        return p.slice(i);
+        return p.slice(i + 1);
       };
       if (this.scope) {
-        ops.map(function(it){
-          return it.p = localize(it.p, this$.scope);
+        ops = ops.map(function(it){
+          var ref$;
+          return ref$ = import$({}, it), ref$.p = localize(it.p, this$.scope), ref$;
         });
       }
       ops = ops.filter(function(it){
-        return it.p && it.p.length;
+        return it.p != null;
       });
-      return this.subscriber.map(function(it){
-        return it.opsIn(ops);
-      });
+      if (ops.length) {
+        return this.subscriber.map(function(it){
+          return it.opsIn(ops);
+        });
+      }
     },
     opsOut: function(ops){
       var this$ = this;

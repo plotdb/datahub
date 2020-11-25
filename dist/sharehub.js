@@ -12,6 +12,7 @@
   sharehub = function(opt){
     var this$ = this;
     opt == null && (opt = {});
+    this.evtHandler = {};
     this.data = {};
     this.id = opt.id || '';
     this.create = opt.create || null;
@@ -27,6 +28,23 @@
     return this;
   };
   sharehub.prototype = import$(import$({}, hub.src.prototype), {
+    on: function(n, cb){
+      var ref$;
+      return ((ref$ = this.evtHandler)[n] || (ref$[n] = [])).push(cb);
+    },
+    fire: function(n){
+      var v, res$, i$, to$, ref$, len$, cb, results$ = [];
+      res$ = [];
+      for (i$ = 1, to$ = arguments.length; i$ < to$; ++i$) {
+        res$.push(arguments[i$]);
+      }
+      v = res$;
+      for (i$ = 0, len$ = (ref$ = this.evtHandler[n] || []).length; i$ < len$; ++i$) {
+        cb = ref$[i$];
+        results$.push(cb.apply(this, v));
+      }
+      return results$;
+    },
     watch: function(ops, opt){
       return this.opsIn(JSON.parse(JSON.stringify(ops)));
     },
@@ -34,9 +52,17 @@
       var this$ = this;
       return Promise.resolve().then(function(){
         var sdb;
-        sdb = new sharedbWrapper({
+        this$.sdb = sdb = new sharedbWrapper({
           url: window.location.protocol.replace(':', '')
         }, window.location.domain);
+        sdb.on('error', function(e){
+          var ref$;
+          if (!((ref$ = this$.evtHandler).error || (ref$.error = [])).length) {
+            return console.error(e.err);
+          } else {
+            return this$.fire('error', e.err);
+          }
+        });
         return sdb.get({
           id: this$.id,
           create: this$.create ? function(){
@@ -54,7 +80,10 @@
         });
       }).then(function(doc){
         this$.doc = doc;
-        return this$.data = JSON.parse(JSON.stringify(this$.doc.data));
+        this$.data = JSON.parse(JSON.stringify(this$.doc.data));
+        return {
+          sdb: this$.sdb
+        };
       });
     }
   });
