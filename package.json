@@ -18,7 +18,6 @@
     "npm": ">=6.4.1"
   },
   "scripts": {
-    "postinstall": "npx fedep",
     "docker-build": "cd tool; ./docker-build.sh",
     "docker-run": "cd tool; ./docker-run.sh",
     "start": "./node_modules/.bin/lsc ./tool/server.ls"
