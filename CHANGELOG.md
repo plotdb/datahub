@@ -1,3 +1,8 @@
+# 0.0.6
+
+ - remove postinstall script to prevent npm install failure
+
+
 # 0.0.5
 
  - suppor doc creation base object in sharehub
