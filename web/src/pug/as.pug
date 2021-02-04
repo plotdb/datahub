@@ -1,0 +1,20 @@
+doctype html
+html
+  include @/bootstrap.ldui/dist/index.pug
+  head
+    +css("/assets/lib/bootstrap/main/css/bootstrap.min.css")
+    +css("/assets/lib/bootstrap.ldui/main/bootstrap.ldui.min.css")
+    +css("/css/index.css")
+  body
+    .w-1200.rwd.mx-auto.my-4
+      .d-flex.align-items-center.justify-content-around
+        .card.shadow(ld-each="form",style="min-width:30%"): .card-body
+          input.form-control.mb-2(ld="input")
+          textarea.form-control(readonly,rows="8",ld="output")
+
+    +script("/assets/lib/@loadingio/ldquery/main/ldq.min.js")
+    +script("/assets/lib/@plotdb/json0/main/json0.min.js")
+    +script("assets/lib/datahub/dev/datahub.min.js")
+    +script("/assets/lib/ldview/main/ldview.min.js")
+    +script("/js/as.js")
+
