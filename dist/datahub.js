@@ -195,13 +195,6 @@
     return this;
   };
   hubif.prototype = import$(Object.create(Object.prototype), {
-    serialize: function(){
-      return this.data;
-    },
-    deserialize: function(it){
-      this.data = it;
-      return this.render();
-    },
     update: function(ops){
       json0.type.apply(this.data, ops);
       return this.render();

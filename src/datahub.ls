@@ -116,8 +116,9 @@ hubif = (opt={}) ->
   @
 
 hubif.prototype = Object.create(Object.prototype) <<< do
-  serialize: -> return @data
-  deserialize: -> @data = it; @render!
+  # seems not useful. hide them for now
+  # serialize: -> return @data
+  # deserialize: -> @data = it; @render!
   update: (ops) ->
     json0.type.apply @data, ops
     @render!

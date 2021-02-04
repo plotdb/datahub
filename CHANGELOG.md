@@ -1,3 +1,8 @@
+# 0.1.1
+
+ - remove `serialize` and `deserialize` function in `datahub.as`.
+
+
 # 0.1.0
 
  - upgrade modules

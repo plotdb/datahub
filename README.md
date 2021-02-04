@@ -60,10 +60,8 @@ Source hub should be passed to this constructor via `opt.src` option:
     someObj = new someClass {src: <myUpstreamHub>}
 
 
-By default, datahub.as stores data in `data` member variable, and expect 4 functions. Here are the 4 functions with their default value:
+By default, datahub.as stores data in `data` member variable, and expect 2 functions. Here are the 2 functions with their default value:
 
-    serialize: -> return @data
-    deserialize: -> @data = it; @render!
     update: (ops) -> json0.type.apply @data, ops; @render!
     render: -> console.log "render is not implemented"
 
