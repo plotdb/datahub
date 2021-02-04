@@ -45,9 +45,9 @@
       }
       return results$;
     },
-    watch: function(ops, opt){
-      if (!opt) {
-        this.data = json0.type.apply(this.data, ops);
+    watch: function(ops, src){
+      if (!src) {
+        this.data = json0.type.apply(this.data, src);
       }
       return this.opsIn(JSON.parse(JSON.stringify(ops)));
     },

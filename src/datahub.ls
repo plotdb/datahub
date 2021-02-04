@@ -108,7 +108,32 @@ usrhub = (opt = {}) ->
   @
 usrhub.prototype = {} <<< deshub.prototype
 
-hub <<< {src: srchub, des: deshub, mem: memhub, usr: usrhub}
+
+hubif = (opt={}) ->
+  @src = opt.src
+  @src.pipe ( @hub = new datahub.des { ops-in: (ops) ~> @update ops } )
+  @data = @hub.get!
+  @
+
+hubif.prototype = Object.create(Object.prototype) <<< do
+  serialize: -> return @data
+  deserialize: -> @data = it; @render!
+  update: (ops) ->
+    json0.type.apply @data, ops
+    @render!
+  render: -> console.log "render is not implemented"
+
+as = (func) ->
+  func.prototype = Object.create(Object.prototype)
+  ret = (...args) ->
+    obj = Reflect.construct hubif, args, ret
+    func.apply obj, args
+    obj
+  Object.setPrototypeOf(ret.prototype, hubif.prototype)
+  return ret
+
+
+hub <<< {src: srchub, des: deshub, mem: memhub, usr: usrhub, as}
 
 if module? => module.exports = hub
 else if window? => window.datahub = hub
