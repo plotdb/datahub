@@ -1,3 +1,9 @@
+# 0.1.0
+
+ - upgrade modules
+ - add `datahub.as` interface wrapper
+
+
 # 0.0.6
 
  - remove postinstall script to prevent npm install failure
