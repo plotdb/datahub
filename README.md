@@ -47,6 +47,27 @@ A sample usage of `memhub` and `usrhub` as follows:
       ]
 
 
+## Wrap constructor
+
+Instead of `userhub`, you can use `datahub.as` to wrap your constructor, thus support hub mechanism directly with your own class:
+
+    someClass = datahub.as (opt = {}) -> @
+    someClass.prototype <<< { ... }
+
+
+Source hub should be passed to this constructor via `opt.src` option:
+
+    someObj = new someClass {src: <myUpstreamHub>}
+
+
+By default, datahub.as stores data in `data` member variable, and expect 4 functions. Here are the 4 functions with their default value:
+
+    serialize: -> return @data
+    deserialize: -> @data = it; @render!
+    update: (ops) -> json0.type.apply @data, ops; @render!
+    render: -> console.log "render is not implemented"
+
+
 ## Sharehub
 
 Sharehub provides a simple interface and implementation reference for adopting ShareDB with data hub to keep edited data in database:
