@@ -1,8 +1,3 @@
-try
-  json0 = require("ot-json0")
-catch e
-  json0 = ot-json0
-
 datahub = hub = (opt = {}) ->
   @opt = opt
   @scope = opt.scope or [] # filter op and data to this scope

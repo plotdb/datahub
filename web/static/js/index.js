@@ -1,6 +1,4 @@
-var json0OtDiff, diffMatchPatch, editor, init, mhub;
-json0OtDiff = require("json0-ot-diff");
-diffMatchPatch = require("diff-match-patch");
+var editor, init, mhub;
 editor = function(opt){
   var root, this$ = this;
   opt == null && (opt = {});
@@ -9,7 +7,7 @@ editor = function(opt){
   this.hub = new datahub.usr({
     scope: opt.scope || [],
     render: function(ops){
-      this$.value = otJson0.type.apply(this$.value, ops);
+      this$.value = json0.type.apply(this$.value, ops);
       return this$.view.render();
     }
   });
@@ -27,11 +25,11 @@ editor = function(opt){
           var node, ops;
           node = arg$.node;
           if (opt.raw) {
-            ops = json0OtDiff(this$.value, JSON.parse(node.value), diffMatchPatch);
+            ops = json0.diff(this$.value, JSON.parse(node.value));
           } else {
-            ops = json0OtDiff(this$.value, {
+            ops = json0.diff(this$.value, {
               str: node.value
-            }, diffMatchPatch);
+            });
           }
           return this$.hub.opsOut(ops);
         }

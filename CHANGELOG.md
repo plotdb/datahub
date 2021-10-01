@@ -1,3 +1,8 @@
+# 0.1.2
+
+ - remove dependency to `ot-json0`.
+
+
 # 0.1.1
 
  - remove `serialize` and `deserialize` function in `datahub.as`.

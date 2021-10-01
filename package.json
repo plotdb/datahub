@@ -40,7 +40,6 @@
     "ldloader": "^2.0.1",
     "ldview": "^0.2.3",
     "livescript": "^1.6.0",
-    "ot-json0": "github:ottypes/json0",
     "sharedb": "^1.6.0",
     "sharedb-wrapper": "^1.0.0",
     "@zbryikt/template": "^2.3.21",
@@ -61,13 +60,7 @@
       "bootstrap.native",
       "ldloader",
       "ldiconfont",
-      "@plotdb/json0",
-      {
-        "name": "ot-json0",
-        "browserify": {
-          "standalone": "ot-json0"
-        }
-      }
+      "@plotdb/json0"
     ]
   }
 }
