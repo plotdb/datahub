@@ -1,9 +1,9 @@
 doctype html
 html
-  include @/bootstrap.ldui/dist/index.pug
+  include @/@loadingio/bootstrap.ext/dist/index.pug
   head
     +css("/assets/lib/bootstrap/main/css/bootstrap.min.css")
-    +css("/assets/lib/bootstrap.ldui/main/bootstrap.ldui.min.css")
+    +css("/assets/lib/@loadingio/bootstrap.ext/main/index.min.css")
     +css("/css/index.css")
   body
     .w-1200.rwd.mx-auto.my-4
@@ -15,6 +15,6 @@ html
     +script("/assets/lib/@loadingio/ldquery/main/ldq.min.js")
     +script("/assets/lib/@plotdb/json0/main/json0.min.js")
     +script("assets/lib/datahub/dev/datahub.min.js")
-    +script("/assets/lib/ldview/main/ldview.min.js")
+    +script("/assets/lib/ldview/main/index.min.js")
     +script("/js/as.js")
 
