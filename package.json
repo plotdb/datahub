@@ -7,7 +7,7 @@
     "dist/**/*"
   ],
   "description": "access scoped data via piped operational transformation",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "https://github.com/plotdb/datahub",
   "repository": {
     "type": "git",
@@ -23,10 +23,11 @@
     "start": "./node_modules/.bin/lsc ./tool/server.ls"
   },
   "devDependencies": {
+    "@loadingio/bootstrap.ext": "^0.0.1",
     "@loadingio/debounce.js": "^0.0.1",
     "@loadingio/ldquery": "^2.2.0",
     "@plotdb/json0": "^0.0.3",
-    "@loadingio/bootstrap.ext": "^0.0.1",
+    "@zbryikt/template": "^2.3.21",
     "bootstrap": "^4.5.3",
     "bootstrap.native": "^3.0.13",
     "browser-pack-flat": "^3.4.2",
@@ -42,7 +43,7 @@
     "livescript": "^1.6.0",
     "sharedb": "^1.6.0",
     "sharedb-wrapper": "^1.0.0",
-    "@zbryikt/template": "^2.3.21",
+    "terser": "^3.17.0",
     "uglifyify": "^5.0.2",
     "unassertify": "^2.1.1",
     "utf-8-validate": "^5.0.2"

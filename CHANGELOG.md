@@ -1,6 +1,7 @@
-# 0.1.2 (upcoming)
+# 0.1.2
 
  - remove dependency to `ot-json0`.
+ - use `terser` to support es code minification
 
 
 # 0.1.1

@@ -4,12 +4,12 @@ mkdir -p dist
 echo "build src/datahub.ls -> dist/datahub.js ..."
 ./node_modules/.bin/lsc -cp src/datahub.ls > dist/datahub.js
 echo "minifying datahub.js ..."
-./node_modules/.bin/uglifyjs dist/datahub.js > dist/datahub.min.js
+./node_modules/.bin/terser dist/datahub.js > dist/datahub.min.js
 
 echo "build src/sharehub.ls -> dist/sharehub.js ..."
 ./node_modules/.bin/lsc -cp src/sharehub.ls > dist/sharehub.js
 echo "minifying sharehub.js ..."
-./node_modules/.bin/uglifyjs dist/sharehub.js > dist/sharehub.min.js
+./node_modules/.bin/terser dist/sharehub.js > dist/sharehub.min.js
 
 echo "browserifying datahub ..."
 ./node_modules/.bin/browserify \
@@ -19,7 +19,7 @@ echo "browserifying datahub ..."
   -g uglifyify \
   -p browser-pack-flat/plugin \
   ./dist/datahub.js \
-  | ./node_modules/.bin/uglifyjs > dist/datahub.bundle.min.js
+  | ./node_modules/.bin/terser > dist/datahub.bundle.min.js
 
 echo "browserifying sharehub ..."
 ./node_modules/.bin/browserify \
@@ -29,11 +29,11 @@ echo "browserifying sharehub ..."
   -g uglifyify \
   -p browser-pack-flat/plugin \
   ./dist/sharehub.js \
-  | ./node_modules/.bin/uglifyjs > dist/sharehub.bundle.min.js
+  | ./node_modules/.bin/terser > dist/sharehub.bundle.min.js
 
 echo "Copy dist/ to web/ ..."
-rm -rf web/static/assets/lib/datahub/dev
-mkdir -p web/static/assets/lib/datahub/dev
-cp -R dist/* web/static/assets/lib/datahub/dev/
+rm -rf web/static/assets/lib/@plotdb/datahub/dev
+mkdir -p web/static/assets/lib/@plotdb/datahub/dev
+cp -R dist/* web/static/assets/lib/@plotdb/datahub/dev/
 echo "done."
 

@@ -1,7 +1,4 @@
-try
-  hub = require("./datahub")
-catch e
-  hub = datahub
+hub = if module? => require("./datahub") else datahub
 
 sharehub = (opt={}) ->
   @evt-handler = {}

@@ -1,3 +1,5 @@
+_json0 = if module? => require("@plotdb/json0") else json0
+
 datahub = hub = (opt = {}) ->
   @opt = opt
   @scope = opt.scope or [] # filter op and data to this scope
@@ -88,7 +90,7 @@ memhub = (opt = {}) ->
   @data = {}
   srchub.call @, {} <<< opt <<< do
     ops-out: (ops) ~>
-      @data = json0.type.apply @data, ops
+      @data = _json0.type.apply @data, ops
       @ops-in ops
     get: ~> JSON.parse(JSON.stringify(@data))
   @
@@ -98,7 +100,7 @@ usrhub = (opt = {}) ->
   deshub.call @, {} <<< opt <<< do
     ops-in: (ops) ~>
       if !@data => @data = (@get! or {})
-      else json0.type.apply @data, ops
+      else _json0.type.apply @data, ops
       opt.render ops
   @
 usrhub.prototype = {} <<< deshub.prototype
@@ -115,7 +117,7 @@ hubif.prototype = Object.create(Object.prototype) <<< do
   # serialize: -> return @data
   # deserialize: -> @data = it; @render!
   update: (ops) ->
-    json0.type.apply @data, ops
+    _json0.type.apply @data, ops
     @render!
   render: -> console.log "render is not implemented"
 
