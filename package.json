@@ -2,7 +2,8 @@
   "author": "zbryikt",
   "name": "@plotdb/datahub",
   "license": "MIT",
-  "main": "dist/datahub.js",
+  "browser": "dist/datahub.min.js",
+  "main": "dist/datahub.min.js",
   "files": [
     "dist/**/*"
   ],
