@@ -1,5 +1,10 @@
 # Change Logs
 
+## v0.2.1
+
+ - release with compact directory structure
+
+
 ## v0.2.0
 
  - upgrade modules
