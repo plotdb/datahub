@@ -6,7 +6,6 @@
  - patch test code to make it work with upgraded modules
  - add `main` and `browser` field in `package.json`.
  - remove livescript header in generated js
- - release with compact directory structure
 
 
 ## v0.1.2
