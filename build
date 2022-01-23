@@ -12,7 +12,7 @@ echo "minifying sharehub.js ..."
 ./node_modules/.bin/terser dist/sharehub.js > dist/sharehub.min.js
 
 echo "browserifying datahub ..."
-./node_modules/.bin/browserify \
+./node_modules/.bin/browserify --no-bf \
   --standalone datahub \
   -g unassertify \
   -g envify \
@@ -22,7 +22,7 @@ echo "browserifying datahub ..."
   | ./node_modules/.bin/terser > dist/datahub.bundle.min.js
 
 echo "browserifying sharehub ..."
-./node_modules/.bin/browserify \
+./node_modules/.bin/browserify --no-bf \
   --standalone sharehub \
   -g unassertify \
   -g envify \
