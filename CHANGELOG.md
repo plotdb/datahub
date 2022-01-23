@@ -1,5 +1,12 @@
 # Change Logs
 
+## v0.2.2
+
+ - add `--no-bf` option in buliding to prevent browserify from using `browser` field in package.json
+   - seems `browser-pack-flat` doesnt work well with browserified file
+ - upgrade `@plotdb/json0`
+
+
 ## v0.2.1
 
  - release with compact directory structure
