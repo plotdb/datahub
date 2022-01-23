@@ -27,7 +27,7 @@
     "@loadingio/bootstrap.ext": "^0.0.4",
     "@loadingio/debounce.js": "^1.0.1",
     "@loadingio/ldquery": "^3.0.2",
-    "@plotdb/json0": "^0.0.4",
+    "@plotdb/json0": "^0.0.5",
     "@zbryikt/template": "^2.3.33",
     "bootstrap": "^4.5.3",
     "bootstrap.native": "^3.0.13",
