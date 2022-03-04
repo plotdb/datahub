@@ -6,25 +6,31 @@ html
   include @/ldview/index.pug
   head
     block prehead
-    +css("assets/lib/bootstrap/main/dist/css/bootstrap.min.css")
-    +css("assets/lib/@loadingio/bootstrap.ext/main/index.min.css")
-    +css("assets/lib/ldiconfont/main/ldif.min.css")
-    +css("https://fonts.googleapis.com/css?family=Roboto:300,400,700|Roboto+Mono")
-    +css("assets/lib/ldloader/main/index.min.css")
-    +css("assets/lib/ldcover/main/index.min.css")
-    +css("css/index.css")
+    +css([
+      {name: "bootstrap", path: "dist/css/bootstrap.min.css"},
+      {name: "@loadingio/bootstrap.ext"},
+      {name: "ldiconfont", path: "ldif.min.css"},
+      {name: "ldloader"},
+      {name: "ldcover"},
+      {url: "https://fonts.googleapis.com/css?family=Roboto:300,400,700|Roboto+Mono"},
+      {url: "/css/index.css"}
+    ])
+
     block head
   body
 
     block body
-    +script("assets/lib/@plotdb/json0/main/dist/json0.min.js")
-    +script("assets/lib/@plotdb/datahub/dev/datahub.min.js")
-    +script("assets/lib/@plotdb/datahub/dev/sharehub.min.js")
-    +script("assets/lib/bootstrap.native/main/dist/bootstrap-native.min.js")
-    +script("assets/lib/@loadingio/ldquery/main/index.min.js")
-    +script("assets/lib/@loadingio/debounce.js/main/index.min.js")
-    +script("assets/lib/ldloader/main/index.min.js")
-    +script("assets/lib/ldcover/main/index.min.js")
-    +script("assets/lib/ldview/main/index.min.js")
-    +script("assets/lib/sharedb-wrapper/main/dist/client.bundle.min.js")
+    +script([
+      {name: "@plotdb/json0", path: "json0.min.js"},
+      {name: "@plotdb/datahub", version: "dev", path: "datahub.min.js"},
+      {name: "@plotdb/datahub", version: "dev", path: "sharehub.min.js"},
+      {name: "bootstrap.native", path: "dist/bootstrap-native.min.js"},
+      {name: "@loadingio/ldquery"},
+      {name: "@loadingio/debounce.js"},
+      {name: "ldloader"},
+      {name: "ldcover"},
+      {name: "ldview"},
+      {name: "sharedb-wrapper", path: "client.bundle.min.js"},
+    ])
+
     block script
