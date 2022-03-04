@@ -1,5 +1,10 @@
 # Change Logs
 
+## v0.2.3 (upcoming)
+
+ - upgrade modules
+
+
 ## v0.2.2
 
  - add `--no-bf` option in buliding to prevent browserify from using `browser` field in package.json
