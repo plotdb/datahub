@@ -1,6 +1,11 @@
-# Data Hub
+# @plotdb/datahub
 
 Access *scoped* data via *piped* *operational transformation*.
+
+
+## Installation
+
+    npm install @plotdb/datahub
 
 
 ## Usage
@@ -16,7 +21,7 @@ after including `datahub.bundle.min.js`:
     des = new datahub.des do
       ops-in (ops): -> # update ui / widget
 
-    # data through pipe are scoped under "my-view"
+    # data through pipe, scoped under "my-view"
     view-hub = new datahub {scope: ["my-view"]}
     # ... from srchub / through view-hub / to deshub
     src.pipe view-hub .pipe des
@@ -30,7 +35,7 @@ after including `datahub.bundle.min.js`:
 
 ## Memhub, Userhub
 
-Datahub also provides auxiliary hubs for quickly trying and testing.
+Datahub also provides auxiliary hubs for quick testing and evaluation.
 
  - `memhub` - data source hub. store data in memory.
  - `usrhub` - simple destination hub. constructor options:
@@ -49,7 +54,7 @@ A sample usage of `memhub` and `usrhub` as follows:
 
 ## Wrap constructor
 
-Instead of `userhub`, you can use `datahub.as` to wrap your constructor, thus support hub mechanism directly with your own class:
+Instead of `userhub`, you can use `datahub.as` to wrap your constructor to support hub mechanism directly with your own class:
 
     someClass = datahub.as (opt = {}) -> @
     someClass.prototype <<< { ... }
@@ -60,10 +65,12 @@ Source hub should be passed to this constructor via `opt.src` option:
     someObj = new someClass {src: <myUpstreamHub>}
 
 
-By default, datahub.as stores data in `data` member variable, and expect 2 functions. Here are the 2 functions with their default value:
+By default, datahub.as stores data in `data` member variable, and expect following 2 functions:
 
-    update: (ops) -> json0.type.apply @data, ops; @render!
-    render: -> console.log "render is not implemented"
+ - `update(ops)`: called when there are updates from source hub. default value:
+    - `(ops) -> json0.type.apply @data, ops; @render!
+ - `render()`: called to trigger re-render. default value:
+    - `-> console.log "render is not implemented"`
 
 
 ## Sharehub
@@ -78,7 +85,7 @@ Sharehub provides a simple interface and implementation reference for adopting S
     shub.init!
       .then -> shub.pipe uhub
 
-Sharehub is in a standalone JS file. include `sharehub.js` if you want to use it.
+Sharehub is in a standalone JS file. include `sharehub.js` / `sharehub.min.js` / `sharehub.bundle.min.js` if you want to use it.
 
 
 ## Scoping
