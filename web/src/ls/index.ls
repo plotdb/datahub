@@ -27,8 +27,8 @@ init = ->
   hub = new datahub scope: <[textarea2]>
   mhub.pipe hub
   new editor name: "editor1", root: '[ld-scope=editor1]', scope: [], raw: true
-  new editor name: "editor2", root: '[ld-scope=editor2]', scope: <[textarea1]>
   new editor name: "editor3", root: '[ld-scope=editor3]', hub: hub
+  new editor name: "editor2", root: '[ld-scope=editor2]', scope: <[textarea1]>
   new editor name: "editor4", root: '[ld-scope=editor4]', hub: hub
 
 mhub = if false => new datahub.mem!

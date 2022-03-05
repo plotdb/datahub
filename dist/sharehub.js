@@ -4,14 +4,17 @@
   sharehub = function(opt){
     var this$ = this;
     opt == null && (opt = {});
-    this.evtHandler = {};
+    this.evthdr = {};
     this.data = {};
     this.id = opt.id || '';
     this.create = opt.create || null;
     hub.src.call(this, import$(import$({}, opt), {
       opsOut: function(ops){
+        var _id;
+        _id = ops._id;
         this$.data = json0.type.apply(this$.data, ops);
-        return this$.doc.submitOp(JSON.parse(JSON.stringify(ops)));
+        this$.doc.submitOp(JSON.parse(JSON.stringify(ops)));
+        return this$.opsIn(ops);
       },
       get: function(){
         return JSON.parse(JSON.stringify(this$.data));
@@ -22,7 +25,7 @@
   sharehub.prototype = import$(import$({}, hub.src.prototype), {
     on: function(n, cb){
       var ref$;
-      return ((ref$ = this.evtHandler)[n] || (ref$[n] = [])).push(cb);
+      return ((ref$ = this.evthdr)[n] || (ref$[n] = [])).push(cb);
     },
     fire: function(n){
       var v, res$, i$, to$, ref$, len$, cb, results$ = [];
@@ -31,17 +34,20 @@
         res$.push(arguments[i$]);
       }
       v = res$;
-      for (i$ = 0, len$ = (ref$ = this.evtHandler[n] || []).length; i$ < len$; ++i$) {
+      for (i$ = 0, len$ = (ref$ = this.evthdr[n] || []).length; i$ < len$; ++i$) {
         cb = ref$[i$];
         results$.push(cb.apply(this, v));
       }
       return results$;
     },
     watch: function(ops, src){
-      if (!src) {
-        this.data = json0.type.apply(this.data, src);
+      if (src) {
+        return;
       }
-      return this.opsIn(JSON.parse(JSON.stringify(ops)));
+      if (!src) {
+        this.data = json0.type.apply(this.data, ops);
+      }
+      return this.opsIn(ops);
     },
     init: function(){
       var this$ = this;
@@ -52,7 +58,7 @@
         }, window.location.domain);
         sdb.on('error', function(e){
           var ref$;
-          if (!((ref$ = this$.evtHandler).error || (ref$.error = [])).length) {
+          if (!((ref$ = this$.evthdr).error || (ref$.error = [])).length) {
             return console.error(e.err);
           } else {
             return this$.fire('error', e.err);

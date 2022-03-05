@@ -62,14 +62,14 @@ init = function(){
     raw: true
   });
   new editor({
-    name: "editor2",
-    root: '[ld-scope=editor2]',
-    scope: ['textarea1']
-  });
-  new editor({
     name: "editor3",
     root: '[ld-scope=editor3]',
     hub: hub
+  });
+  new editor({
+    name: "editor2",
+    root: '[ld-scope=editor2]',
+    scope: ['textarea1']
   });
   return new editor({
     name: "editor4",
