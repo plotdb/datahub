@@ -1,8 +1,16 @@
 # Change Logs
 
-## v0.2.3 (upcoming)
+## v0.3.0
 
  - upgrade modules
+ - add `state` for tracking data source status
+ - track local ops to prevent from duplicated update
+ - add `state` api and `open` and `close` events to reflect source hub status.
+ - always clone ops in `ops-in` to prevent path interference between hubs
+ - rewrite `datahub.as` to limit exposed interface and to simply usage
+ - fix bug:
+   - incorrect `subscriber` option handling
+   - `get` failed if `src` is not yet set.
 
 
 ## v0.2.2
