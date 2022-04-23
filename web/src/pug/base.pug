@@ -21,16 +21,18 @@ html
 
     block body
     +script([
-      {name: "@plotdb/json0", path: "json0.min.js"},
-      {name: "@plotdb/datahub", version: "dev", path: "datahub.min.js"},
-      {name: "@plotdb/datahub", version: "dev", path: "sharehub.min.js"},
       {name: "bootstrap.native", path: "dist/bootstrap-native.min.js"},
-      {name: "@loadingio/ldquery"},
       {name: "@loadingio/debounce.js"},
+      {name: "@loadingio/ldquery"},
       {name: "ldloader"},
       {name: "ldcover"},
       {name: "ldview"},
-      {name: "sharedb-wrapper", path: "client.bundle.min.js"},
+      {name: "@plotdb/json0", path: "json0.min.js"},
+      {name: "@plotdb/ews", path: "sharedb.min.js"},
+      {name: "@plotdb/ews"},
+      {name: "@plotdb/ews", path: "sdb-client.min.js"},
+      {name: "@plotdb/datahub", version: "dev", path: "datahub.min.js"},
+      {name: "@plotdb/datahub", version: "dev", path: "sharehub.min.js"}
     ])
 
     block script

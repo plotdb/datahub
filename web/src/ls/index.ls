@@ -1,26 +1,29 @@
+ws = new ews!
+<- ws.connect!then _
+
 editor = (opt={}) ->
   @opt = opt
   @root = root = ld$.find(opt.root, 0)
   @hub = new datahub.usr do
     scope: opt.scope or []
     render: (ops) ~>
-      @value = json0.type.apply @value, ops
+      #@value = json0.type.apply @value, ops
       @view.render!
   if opt.hub => opt.hub.pipe @hub
   else mhub.pipe @hub
-  @value = @hub.get! or {}
+  #@value = @hub.get! or {}
 
   @view = new ldView do
     root: root
     action: input: do
       input: ({node}) ~>
-        if opt.raw => ops = json0.diff(@value, JSON.parse(node.value))
-        else ops = json0.diff(@value, {str: node.value})
+        if opt.raw => ops = json0.diff(@hub.get!, JSON.parse(node.value))
+        else ops = json0.diff(@hub.get!, {str: node.value})
         @hub.ops-out ops
     handler: do
       input: ({node}) ~>
-        if opt.raw => node.value = JSON.stringify(@value, null, 2)
-        else node.value = @value.str or ''
+        if opt.raw => node.value = JSON.stringify(@hub.get!, null, 2)
+        else node.value = @hub.get!str or ''
   @
 
 init = ->
@@ -32,6 +35,6 @@ init = ->
   new editor name: "editor4", root: '[ld-scope=editor4]', hub: hub
 
 mhub = if false => new datahub.mem!
-else new sharehub {id: \test2, create: -> {textarea1: {str: "hello"}, textarea2: {str: "world"}}}
+else new sharehub {ews: ws, id: \test2, create: -> {textarea1: {str: "hello"}, textarea2: {str: "world"}}}
 (if mhub.init => mhub.init! else Promise.resolve!)
   .then -> init!

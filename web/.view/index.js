@@ -372,18 +372,20 @@ attributes: {"class": "col-md"}
 pug_html = pug_html + "\u003C\u002Fdiv\u003E\u003C\u002Fdiv\u003E";
 ;pug_debug_line = 23;pug_debug_filename = "\u002FUsers\u002Ftkirby\u002Fworkspace\u002Fzbryikt\u002Fplotdb\u002Fprojects\u002Fdatahub\u002Fweb\u002Fsrc\u002Fpug\u002Fbase.pug";
 pug_mixins["script"]([
-      {name: "@plotdb/json0", path: "json0.min.js"},
-      {name: "@plotdb/datahub", version: "dev", path: "datahub.min.js"},
-      {name: "@plotdb/datahub", version: "dev", path: "sharehub.min.js"},
       {name: "bootstrap.native", path: "dist/bootstrap-native.min.js"},
-      {name: "@loadingio/ldquery"},
       {name: "@loadingio/debounce.js"},
+      {name: "@loadingio/ldquery"},
       {name: "ldloader"},
       {name: "ldcover"},
       {name: "ldview"},
-      {name: "sharedb-wrapper", path: "client.bundle.min.js"},
+      {name: "@plotdb/json0", path: "json0.min.js"},
+      {name: "@plotdb/ews", path: "sharedb.min.js"},
+      {name: "@plotdb/ews"},
+      {name: "@plotdb/ews", path: "sdb-client.min.js"},
+      {name: "@plotdb/datahub", version: "dev", path: "datahub.min.js"},
+      {name: "@plotdb/datahub", version: "dev", path: "sharehub.min.js"}
     ]);
-;pug_debug_line = 36;pug_debug_filename = "\u002FUsers\u002Ftkirby\u002Fworkspace\u002Fzbryikt\u002Fplotdb\u002Fprojects\u002Fdatahub\u002Fweb\u002Fsrc\u002Fpug\u002Fbase.pug";
+;pug_debug_line = 38;pug_debug_filename = "\u002FUsers\u002Ftkirby\u002Fworkspace\u002Fzbryikt\u002Fplotdb\u002Fprojects\u002Fdatahub\u002Fweb\u002Fsrc\u002Fpug\u002Fbase.pug";
 ;pug_debug_line = 32;pug_debug_filename = "src\u002Fpug\u002Findex.pug";
 pug_mixins["script"]("/js/index.js");
 pug_html = pug_html + "\u003C\u002Fbody\u003E\u003C\u002Fhtml\u003E";
