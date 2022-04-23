@@ -7,7 +7,8 @@
     this.evthdr = {};
     this.data = {};
     this.id = opt.id || '';
-    this.create = opt.create || null;
+    this._create = opt.create || null;
+    this._watch = opt.watch || null;
     this.ews = opt.ews;
     hub.src.call(this, import$(import$({}, opt), {
       opsOut: function(ops){
@@ -41,11 +42,11 @@
       return results$;
     },
     watch: function(ops, src){
+      if (this._watch) {
+        this._watch(ops, src);
+      }
       if (src) {
         return;
-      }
-      if (!src) {
-        this.data = json0.type.apply(this.data, ops);
       }
       return this.opsIn(ops);
     },
@@ -66,9 +67,9 @@
         });
         return sdb.get({
           id: this$.id,
-          create: this$.create
+          create: this$._create
             ? function(){
-              return this$.create();
+              return this$._create();
             }
             : function(){
               return {};

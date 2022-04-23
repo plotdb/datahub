@@ -1,5 +1,11 @@
 # Change Logs
 
+## v0.5.0
+
+ - support `watch` option in `sharehub`
+ - dont clone data in hub. Let user be responsible to keep it untouched.
+
+
 ## v0.4.0
 
  - use @plotdb/ews in sharehub

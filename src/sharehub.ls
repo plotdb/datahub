@@ -4,12 +4,13 @@ sharehub = (opt={}) ->
   @evthdr = {}
   @data = {}
   @id = opt.id or ''
-  @create = opt.create or null
+  @_create = opt.create or null
+  @_watch = opt.watch or null
   @ews = opt.ews
   hub.src.call @, {} <<< opt <<< do
     ops-out: (ops) ~>
       _id = ops._id
-      # we only have to apply if we decide to make a clone of remote obj when init
+      # DATA: we only have to apply if we decide to make a clone of remote obj when init
       #@data = json0.type.apply @data, ops
       @doc.submitOp JSON.parse(JSON.stringify(ops))
       # reflect to other subtree in hub
@@ -25,8 +26,10 @@ sharehub.prototype = {} <<< hub.src.prototype <<< do
     # if we are src, it has been applied when before submitOp
     # we already ops-in when ops-out for local event.
     # this is necessary since we have to track origin hub by _id
+    if @_watch => @_watch ops, src
     if src => return
-    if !src => @data = json0.type.apply @data, ops
+    # DATA: We have to apply if we clone data when init.
+    #if !src => @data = json0.type.apply @data, ops
     @ops-in ops
   init: ->
     Promise.resolve!
@@ -38,13 +41,13 @@ sharehub.prototype = {} <<< hub.src.prototype <<< do
           else @fire \error, e.err
         sdb.get do
           id: @id
-          create: if @create => (~> @create!) else (->{})
+          create: if @_create => (~> @_create!) else (->{})
           watch: (...args) ~> @watch.apply @, args
       .then (doc) ~>
         @doc = doc
         @data = doc.data
-        # we dont really need this, but then users should not touch it
-        @data = JSON.parse(JSON.stringify(@doc.data))
+        # DATA: we dont really need this, but this ensures that users cant alter our data
+        # @data = JSON.parse(JSON.stringify(@doc.data))
         return {sdb: @sdb}
 
 if module? => module.exports = sharehub
