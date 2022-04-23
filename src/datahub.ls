@@ -131,7 +131,7 @@ memhub = (opt = {}) ->
     ops-out: (ops) ~>
       @_data = _json0.type.apply @_data, ops
       @ops-in ops
-    get: ~> JSON.parse(JSON.stringify(@_data))
+    get: ~> @_data
   @_.state = \opened
   @
 
@@ -140,8 +140,7 @@ memhub.prototype = {} <<< srchub.prototype
 usrhub = (opt = {}) ->
   deshub.call @, {} <<< opt <<< do
     ops-in: (ops) ~>
-      if !@_data => @_data = (@get! or {})
-      else _json0.type.apply @_data, ops
+      @_data = @get! or {}
       opt.render ops
   @
 usrhub.prototype = {} <<< deshub.prototype

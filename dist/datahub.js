@@ -225,7 +225,7 @@
         return this$.opsIn(ops);
       },
       get: function(){
-        return JSON.parse(JSON.stringify(this$._data));
+        return this$._data;
       }
     }));
     this._.state = 'opened';
@@ -237,11 +237,7 @@
     opt == null && (opt = {});
     deshub.call(this, import$(import$({}, opt), {
       opsIn: function(ops){
-        if (!this$._data) {
-          this$._data = this$.get() || {};
-        } else {
-          _json0.type.apply(this$._data, ops);
-        }
+        this$._data = this$.get() || {};
         return opt.render(ops);
       }
     }));

@@ -1,5 +1,10 @@
 # Change Logs
 
+## v0.5.1
+
+ - fix bug: memhub and usrhub should not clone data to prevent data inconsistency
+
+
 ## v0.5.0
 
  - support `watch` option in `sharehub`
