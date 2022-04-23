@@ -8,11 +8,11 @@
     this.data = {};
     this.id = opt.id || '';
     this.create = opt.create || null;
+    this.ews = opt.ews;
     hub.src.call(this, import$(import$({}, opt), {
       opsOut: function(ops){
         var _id;
         _id = ops._id;
-        this$.data = json0.type.apply(this$.data, ops);
         this$.doc.submitOp(JSON.parse(JSON.stringify(ops)));
         return this$.opsIn(ops);
       },
@@ -53,9 +53,9 @@
       var this$ = this;
       return Promise.resolve().then(function(){
         var sdb;
-        this$.sdb = sdb = new sharedbWrapper({
-          url: window.location.protocol.replace(':', '')
-        }, window.location.domain);
+        this$.sdb = sdb = new ews.sdbClient({
+          ws: this$.ews
+        });
         sdb.on('error', function(e){
           var ref$;
           if (!((ref$ = this$.evthdr).error || (ref$.error = [])).length) {
@@ -66,9 +66,13 @@
         });
         return sdb.get({
           id: this$.id,
-          create: this$.create ? function(){
-            return this$.create();
-          } : null,
+          create: this$.create
+            ? function(){
+              return this$.create();
+            }
+            : function(){
+              return {};
+            },
           watch: function(){
             var args, res$, i$, to$;
             res$ = [];
@@ -81,7 +85,7 @@
         });
       }).then(function(doc){
         this$.doc = doc;
-        this$.data = JSON.parse(JSON.stringify(this$.doc.data));
+        this$.data = doc.data;
         return {
           sdb: this$.sdb
         };

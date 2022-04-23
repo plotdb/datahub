@@ -1,5 +1,12 @@
 # Change Logs
 
+## v0.4.0
+
+ - use @plotdb/ews in sharehub
+ - remove browserify js since we don't really need it
+ - fix bug: `_id` is gone when pipe back from source.
+
+
 ## v0.3.0
 
  - upgrade modules

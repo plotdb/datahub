@@ -110,7 +110,6 @@
       if (ops._id === this._id) {
         return;
       }
-      ops = JSON.parse(JSON.stringify(ops));
       _id = ops._id;
       localize = function(p, s){
         var i$, to$, i;

@@ -5,10 +5,12 @@ sharehub = (opt={}) ->
   @data = {}
   @id = opt.id or ''
   @create = opt.create or null
+  @ews = opt.ews
   hub.src.call @, {} <<< opt <<< do
     ops-out: (ops) ~>
       _id = ops._id
-      @data = json0.type.apply @data, ops
+      # we only have to apply if we decide to make a clone of remote obj when init
+      #@data = json0.type.apply @data, ops
       @doc.submitOp JSON.parse(JSON.stringify(ops))
       # reflect to other subtree in hub
       @ops-in ops
@@ -29,16 +31,19 @@ sharehub.prototype = {} <<< hub.src.prototype <<< do
   init: ->
     Promise.resolve!
       .then ~>
-        @sdb = sdb = new sharedb-wrapper url: window.location.protocol.replace(\:,''), window.location.domain
+        @sdb = sdb = new ews.sdb-client ws: @ews
+        #@sdb = sdb = new sharedb-wrapper url: window.location.protocol.replace(\:,''), window.location.domain
         sdb.on \error, (e) ~>
           if !@evthdr.[]error.length => console.error e.err
           else @fire \error, e.err
         sdb.get do
           id: @id
-          create: if @create => (~> @create!) else null
+          create: if @create => (~> @create!) else (->{})
           watch: (...args) ~> @watch.apply @, args
       .then (doc) ~>
         @doc = doc
+        @data = doc.data
+        # we dont really need this, but then users should not touch it
         @data = JSON.parse(JSON.stringify(@doc.data))
         return {sdb: @sdb}
 

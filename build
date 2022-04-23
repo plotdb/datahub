@@ -11,25 +11,25 @@ echo "build src/sharehub.ls -> dist/sharehub.js ..."
 echo "minifying sharehub.js ..."
 ./node_modules/.bin/terser dist/sharehub.js > dist/sharehub.min.js
 
-echo "browserifying datahub ..."
-./node_modules/.bin/browserify --no-bf \
-  --standalone datahub \
-  -g unassertify \
-  -g envify \
-  -g uglifyify \
-  -p browser-pack-flat/plugin \
-  ./dist/datahub.js \
-  | ./node_modules/.bin/terser > dist/datahub.bundle.min.js
-
-echo "browserifying sharehub ..."
-./node_modules/.bin/browserify --no-bf \
-  --standalone sharehub \
-  -g unassertify \
-  -g envify \
-  -g uglifyify \
-  -p browser-pack-flat/plugin \
-  ./dist/sharehub.js \
-  | ./node_modules/.bin/terser > dist/sharehub.bundle.min.js
+#echo "browserifying datahub ..."
+#./node_modules/.bin/browserify --no-bf \
+#  --standalone datahub \
+#  -g unassertify \
+#  -g envify \
+#  -g uglifyify \
+#  -p browser-pack-flat/plugin \
+#  ./dist/datahub.js \
+#  | ./node_modules/.bin/terser > dist/datahub.bundle.min.js
+#
+#echo "browserifying sharehub ..."
+#./node_modules/.bin/browserify --no-bf \
+#  --standalone sharehub \
+#  -g unassertify \
+#  -g envify \
+#  -g uglifyify \
+#  -p browser-pack-flat/plugin \
+#  ./dist/sharehub.js \
+#  | ./node_modules/.bin/terser > dist/sharehub.bundle.min.js
 
 echo "Copy dist/ to web/ ..."
 rm -rf web/static/assets/lib/@plotdb/datahub/dev

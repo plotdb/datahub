@@ -63,8 +63,10 @@ datahub.prototype = Object.create(Object.prototype) <<< do
   # src -> des: tell des data is updating
   ops-in: (ops) ->
     if ops._id == @_id => return
-    ops = JSON.parse(JSON.stringify(ops))
     _id = ops._id
+    # we may not need clone but _id has to be fetched before clone
+    # since JSON stringify wont keep _id because ops is an array
+    #ops = JSON.parse(JSON.stringify(ops))
     localize = (p, s) ->
       for i from 0 til s.length => if p[i] != s[i] => return
       p.slice i + 1
