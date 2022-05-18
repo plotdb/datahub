@@ -15,7 +15,7 @@ after including `datahub.bundle.min.js`:
     # this is our data source.
     src = new datahub.src do
       ops-out: (ops) -> # update data src by incoming ops
-      get: -> # return complete data. always return cloned data to prevent user from touching original data
+      get: -> # return complete data. raw data is returned, users should make their own copy if to use.
 
     # this is our view controller
     des = new datahub.des do
@@ -121,6 +121,17 @@ Sharehub provides a simple interface and implementation reference for adopting S
 
 Sharehub is in a standalone JS file. include `sharehub.js` / `sharehub.min.js` / `sharehub.bundle.min.js` if you want to use it.
 
+Constructor options:
+
+ - `id`: document to connect.  optional
+ - `init-connect`: default true. if true, auto connect to sharedb if `id` is given.
+
+
+APIs:
+
+ - `connect(id)`: connect to sharedb with doc id `id`. return Promise, resolved when connected.
+ - `disconnect()`: disconnect current doc from sharedb. return Promise, resolved when disconnected.
+
 
 ## Scoping
 
@@ -146,7 +157,7 @@ You can pipe data source to a hub that is scoped, and pipe this scoped hub to th
    - fields of `o`:
      - `ops-in(ops)`: a function to handle inward ops.
    - a destination hub is responsible to call `ops-out(ops)`  when there are data changes to source (outward ops)
- - `get()`: return a ( cloned ) snapshot of source data
+ - `get()`: return a snapshot of source data
  - `pipe(hub)`: pipe down events to `hub`.
  - `addon(ops)`: prepend `ops` to create node for ops accessing non-existed path
  - `cut(hub)`: remove `hub` from current object's subscriber list.

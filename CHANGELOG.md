@@ -1,5 +1,12 @@
 # Change Logs
 
+## v0.5.2
+
+ - add `connect` and `disconnect` API in `sharehub` for hub reusin for reconnection
+ - add `init-connect` option in `sharehub`
+ - tweak doc / comment about data cloning - we now dont suggest clone data internally by default
+
+
 ## v0.5.1
 
  - fix bug: memhub and usrhub should not clone data to prevent data inconsistency

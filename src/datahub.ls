@@ -114,7 +114,7 @@ srchub = (opt={}) ->
   datahub.call @, opt
   @as-src do
     ops-out: opt.ops-out or (->)
-    # should always return cloned data otherwise user might touch the original data
+    # raw data is returned. user should clone returned data if to use.
     get: opt.get or (->)
   @
 srchub.prototype = {} <<< datahub.prototype

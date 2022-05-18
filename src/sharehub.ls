@@ -4,6 +4,7 @@ sharehub = (opt={}) ->
   @evthdr = {}
   @data = {}
   @id = opt.id or ''
+  @_init-connect = if opt.init-connect? => opt.init-connect else true
   @_create = opt.create or null
   @_watch = opt.watch or null
   @ews = opt.ews
@@ -28,27 +29,40 @@ sharehub.prototype = {} <<< hub.src.prototype <<< do
     # this is necessary since we have to track origin hub by _id
     if @_watch => @_watch ops, src
     if src => return
-    # DATA: We have to apply if we clone data when init.
+    # DATA: We have to apply if we clone data when connecting.
     #if !src => @data = json0.type.apply @data, ops
     @ops-in ops
+
+  connect: (id) ->
+    p = if @sdb => Promise.resolve!
+    else @init!
+    p
+      .then ~>
+        @sdb.get do
+          id: id or @id
+          create: if @_create => (~> @_create!) else (->{})
+          watch: (...args) ~> @watch.apply @, args
+      .then (doc) ~>
+        # DATA: We pass raw data now, but if we want to clone:
+        # @data = JSON.parse(JSON.stringify(doc.data))
+        @ <<< doc: doc, data: doc.data
+
+  disconnect: ->
+    if !@doc => return Promise.resolve!
+    (res, rej) <~ new Promise _
+    <~ @doc.destroy _
+    @ <<< {doc: null, data: null}
+    res!
+
   init: ->
     Promise.resolve!
       .then ~>
         @sdb = sdb = new ews.sdb-client ws: @ews
-        #@sdb = sdb = new sharedb-wrapper url: window.location.protocol.replace(\:,''), window.location.domain
         sdb.on \error, (e) ~>
           if !@evthdr.[]error.length => console.error e.err
           else @fire \error, e.err
-        sdb.get do
-          id: @id
-          create: if @_create => (~> @_create!) else (->{})
-          watch: (...args) ~> @watch.apply @, args
-      .then (doc) ~>
-        @doc = doc
-        @data = doc.data
-        # DATA: we dont really need this, but this ensures that users cant alter our data
-        # @data = JSON.parse(JSON.stringify(@doc.data))
-        return {sdb: @sdb}
+        if @id and @_init-connect => @connect!
+      .then ~> {sdb: @sdb}
 
 if module? => module.exports = sharehub
 else if window? => window.sharehub = sharehub

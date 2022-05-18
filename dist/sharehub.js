@@ -7,6 +7,7 @@
     this.evthdr = {};
     this.data = {};
     this.id = opt.id || '';
+    this._initConnect = opt.initConnect != null ? opt.initConnect : true;
     this._create = opt.create || null;
     this._watch = opt.watch || null;
     this.ews = opt.ews;
@@ -50,23 +51,14 @@
       }
       return this.opsIn(ops);
     },
-    init: function(){
-      var this$ = this;
-      return Promise.resolve().then(function(){
-        var sdb;
-        this$.sdb = sdb = new ews.sdbClient({
-          ws: this$.ews
-        });
-        sdb.on('error', function(e){
-          var ref$;
-          if (!((ref$ = this$.evthdr).error || (ref$.error = [])).length) {
-            return console.error(e.err);
-          } else {
-            return this$.fire('error', e.err);
-          }
-        });
-        return sdb.get({
-          id: this$.id,
+    connect: function(id){
+      var p, this$ = this;
+      p = this.sdb
+        ? Promise.resolve()
+        : this.init();
+      return p.then(function(){
+        return this$.sdb.get({
+          id: id || this$.id,
           create: this$._create
             ? function(){
               return this$._create();
@@ -85,8 +77,41 @@
           }
         });
       }).then(function(doc){
-        this$.doc = doc;
-        this$.data = doc.data;
+        return this$.doc = doc, this$.data = doc.data, this$;
+      });
+    },
+    disconnect: function(){
+      var this$ = this;
+      if (!this.doc) {
+        return Promise.resolve();
+      }
+      return new Promise(function(res, rej){
+        return this$.doc.destroy(function(){
+          this$.doc = null;
+          this$.data = null;
+          return res();
+        });
+      });
+    },
+    init: function(){
+      var this$ = this;
+      return Promise.resolve().then(function(){
+        var sdb;
+        this$.sdb = sdb = new ews.sdbClient({
+          ws: this$.ews
+        });
+        sdb.on('error', function(e){
+          var ref$;
+          if (!((ref$ = this$.evthdr).error || (ref$.error = [])).length) {
+            return console.error(e.err);
+          } else {
+            return this$.fire('error', e.err);
+          }
+        });
+        if (this$.id && this$._initConnect) {
+          return this$.connect();
+        }
+      }).then(function(){
         return {
           sdb: this$.sdb
         };
