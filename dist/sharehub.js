@@ -1,17 +1,17 @@
 (function(){
   var hub, sharehub;
   hub = typeof module != 'undefined' && module !== null ? require("./datahub") : datahub;
-  sharehub = function(opt){
+  sharehub = function(o){
     var this$ = this;
-    opt == null && (opt = {});
+    o == null && (o = {});
     this.evthdr = {};
     this.data = {};
-    this.id = opt.id || '';
-    this._initConnect = opt.initConnect != null ? opt.initConnect : true;
-    this._create = opt.create || null;
-    this._watch = opt.watch || null;
-    this.ews = opt.ews;
-    hub.src.call(this, import$(import$({}, opt), {
+    this.config(o);
+    this._initConnect = o.initConnect != null ? o.initConnect : true;
+    this._create = o.create || null;
+    this._watch = o.watch || null;
+    this.ews = o.ews;
+    hub.src.call(this, import$(import$({}, o), {
       opsOut: function(ops){
         var _id;
         _id = ops._id;
@@ -42,6 +42,13 @@
       }
       return results$;
     },
+    config: function(o){
+      o == null && (o = {});
+      if (o.id != null) {
+        this.id = o.id;
+      }
+      return this.collection = o.collection || 'doc';
+    },
     watch: function(ops, src){
       if (this._watch) {
         this._watch(ops, src);
@@ -51,33 +58,59 @@
       }
       return this.opsIn(ops);
     },
-    connect: function(id){
-      var p, this$ = this;
-      p = this.sdb
-        ? Promise.resolve()
-        : this.init();
-      return p.then(function(){
-        return this$.sdb.get({
-          id: id || this$.id,
-          create: this$._create
-            ? function(){
-              return this$._create();
+    connect: function(o){
+      var force, this$ = this;
+      if (o != null) {
+        o = typeof o === 'object'
+          ? o
+          : {
+            id: o
+          };
+      }
+      force = !(o != null) || !(o.force != null)
+        ? true
+        : o.force;
+      return Promise.resolve().then(function(){
+        if (this$.sdb) {
+          return this$.sdb.ensure();
+        } else {
+          return this$.init();
+        }
+      }).then(function(){
+        if (o != null) {
+          this$.config(o);
+        }
+        if (this$.doc && this$.doc.id === this$.id && this$.doc.collection === this$.collection && (o.force != null && !o.force)) {
+          return;
+        }
+        return (this$.doc
+          ? this$.disconnect()
+          : Promise.resolve()).then(function(){
+          return this$.sdb.get({
+            id: this$.id,
+            collection: this$.collection,
+            create: this$._create
+              ? function(){
+                return this$._create();
+              }
+              : function(){
+                return {};
+              },
+            watch: function(){
+              var args, res$, i$, to$;
+              res$ = [];
+              for (i$ = 0, to$ = arguments.length; i$ < to$; ++i$) {
+                res$.push(arguments[i$]);
+              }
+              args = res$;
+              return this$.watch.apply(this$, args);
             }
-            : function(){
-              return {};
-            },
-          watch: function(){
-            var args, res$, i$, to$;
-            res$ = [];
-            for (i$ = 0, to$ = arguments.length; i$ < to$; ++i$) {
-              res$.push(arguments[i$]);
-            }
-            args = res$;
-            return this$.watch.apply(this$, args);
-          }
+          });
+        }).then(function(doc){
+          this$.doc = doc;
+          this$.data = doc.data;
+          return this$.fire('open');
         });
-      }).then(function(doc){
-        return this$.doc = doc, this$.data = doc.data, this$;
       });
     },
     disconnect: function(){
@@ -89,6 +122,7 @@
         return this$.doc.destroy(function(){
           this$.doc = null;
           this$.data = null;
+          this$.fire('close');
           return res();
         });
       });
@@ -97,6 +131,9 @@
       var this$ = this;
       return Promise.resolve().then(function(){
         var sdb;
+        if (this$.sdb) {
+          return this$.sdb.ensure();
+        }
         this$.sdb = sdb = new ews.sdbClient({
           ws: this$.ews
         });
@@ -107,6 +144,9 @@
           } else {
             return this$.fire('error', e.err);
           }
+        });
+        sdb.on('close', function(){
+          return this$.disconnect();
         });
         if (this$.id && this$._initConnect) {
           return this$.connect();

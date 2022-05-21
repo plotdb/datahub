@@ -123,14 +123,38 @@ Sharehub is in a standalone JS file. include `sharehub.js` / `sharehub.min.js` /
 
 Constructor options:
 
- - `id`: document to connect.  optional
- - `init-connect`: default true. if true, auto connect to sharedb if `id` is given.
+ - `id`: id of the sharedb doc to connect.  optional
+ - `collection`: collection of the sharedb collection to connect.  optional, default `doc` if omitted.
+ - `initConnect`: default true. if true, auto connect to sharedb if `id` is given.
+ - `create()`: empty object creator function. should return an object for initial value.
+   - when omitted, a creator function returing an empty object is used.
+ - `watch(ops, src)`: watcher function. optional
+ - `ews`: `@plotdb/ews` instance to use. required.
 
 
 APIs:
 
- - `connect(id)`: connect to sharedb with doc id `id`. return Promise, resolved when connected.
+ - `connect(opt)`: connect to sharedb. return Promise, resolved when connected.
+   - `opt` is either:
+     - omitted (undefined): `connect()` will use stored `id` and `collection` to (re)connect.
+     - a string for id of the sharedb doc to connect. In this case, `collection` will be set to `doc`.
+     - an object with fields:
+       - `id`: sharedb id. use stored `id` if omitted. this id will be stored for future use. (e.g., auto-reconnect)
+       - `collection`: `doc` if omitted.
+       - `force`: default true. when true, force to reconnect even if `id` / `collection` is the same.
+          - when `opt` is a string or omitted, `force` will also be true.
+   - if `id` / `collection` are provided in `opt`, they will be stored internal for future use.
  - `disconnect()`: disconnect current doc from sharedb. return Promise, resolved when disconnected.
+   - this will be automatically called when internal `sdb-client` is closed.
+ - `config(opt)`: update configuration. opt has following fields:
+   - `id`: sharedb id.
+   - `collection`: `doc` if omitted.
+
+Additionally, `sharehub` fire following events
+
+ - `open`: fired when a connect is successfully done.
+ - `close`: fired when `disconnect` is called.
+ - `error`: fired when internal sdb-client object fires error events.
 
 
 ## Scoping
