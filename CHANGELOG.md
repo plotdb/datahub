@@ -1,5 +1,18 @@
 # Change Logs
 
+## v0.5.3
+
+ - sharehub
+   - reuse internal sdb-client object so we dont have to re-create the entire object
+   - always disconnect if sdb-client closed.
+   - use `config` to update `id` and `collection` so we can re-config it anytime
+   - accept `config` instead of only `id` in connect, and make it optional to make reconnect easier
+   - support `force` option in connect to provide "only reconnect if not availabel mechanism"
+     - but by default, `force` is always enabled.
+   - provide `close` and `open` event so user can know when to get the whole data again
+   - auto init or ensure socket connection in `connect` to make it fool-proof
+
+
 ## v0.5.2
 
  - add `connect` and `disconnect` API in `sharehub` for hub reusin for reconnection
