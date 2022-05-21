@@ -1,5 +1,11 @@
 # Change Logs
 
+## v0.5.4
+
+ - sharehub
+   - fix bug: when get, we should return original data instead of a copied one
+
+
 ## v0.5.3
 
  - sharehub

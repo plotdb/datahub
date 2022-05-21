@@ -19,7 +19,7 @@
         return this$.opsIn(ops);
       },
       get: function(){
-        return JSON.parse(JSON.stringify(this$.data));
+        return this$.data;
       }
     }));
     return this;

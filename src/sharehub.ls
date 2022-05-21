@@ -16,7 +16,7 @@ sharehub = (o={}) ->
       @doc.submitOp JSON.parse(JSON.stringify(ops))
       # reflect to other subtree in hub
       @ops-in ops
-    get: ~> JSON.parse(JSON.stringify(@data))
+    get: ~> @data
   @
 
 sharehub.prototype = {} <<< hub.src.prototype <<< do
