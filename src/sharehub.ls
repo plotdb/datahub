@@ -74,7 +74,7 @@ sharehub.prototype = {} <<< hub.src.prototype <<< do
         if @sdb => return @sdb.ensure!
         @sdb = sdb = new ews.sdb-client ws: @ews
         sdb.on \error, (e) ~>
-          if !@evthdr.[]error.length => console.error e.err
+          if !@evthdr.[]error.length => throw e.err
           else @fire \error, e.err
         sdb.on \close, ~> @disconnect!
         if @id and @_init-connect => @connect!

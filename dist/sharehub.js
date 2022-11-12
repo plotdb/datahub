@@ -140,7 +140,7 @@
         sdb.on('error', function(e){
           var ref$;
           if (!((ref$ = this$.evthdr).error || (ref$.error = [])).length) {
-            return console.error(e.err);
+            throw e.err;
           } else {
             return this$.fire('error', e.err);
           }

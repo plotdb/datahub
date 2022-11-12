@@ -1,5 +1,10 @@
 # Change Logs
 
+## v0.5.5
+
+ - sharehub: fix bug: error should be thrown if no handler registered.
+
+
 ## v0.5.4
 
  - sharehub
