@@ -12,7 +12,7 @@
     this._watch = o.watch || null;
     this.ews = o.ews;
     watchdog = {
-      timeout: 20000,
+      timeout: 13000,
       count: 0,
       hash: {},
       hdr: null,

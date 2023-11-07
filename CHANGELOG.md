@@ -1,5 +1,10 @@
 # Change Logs
 
+## v0.5.9
+
+ - make watchdog timeout shorter
+
+
 ## v0.5.8
 
  - prevent sending `submitOps` if websocket is disconnected
