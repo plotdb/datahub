@@ -39,6 +39,7 @@ sharehub = (o={}) ->
 
   hub.src.call @, {} <<< o <<< do
     ops-out: (ops) ~>
+      if @ews.status! != 2 => return
       _id = ops._id
       # DATA: we only have to apply if we decide to make a clone of remote obj when init
       #@data = json0.type.apply @data, ops

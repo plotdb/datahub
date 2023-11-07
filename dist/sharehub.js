@@ -80,6 +80,9 @@
     hub.src.call(this, import$(import$({}, o), {
       opsOut: function(ops){
         var _id, tid;
+        if (this$.ews.status() !== 2) {
+          return;
+        }
         _id = ops._id;
         tid = watchdog.track();
         this$.doc.submitOp(JSON.parse(JSON.stringify(ops)), watchdog.untrack(tid));

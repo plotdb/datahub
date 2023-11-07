@@ -1,5 +1,10 @@
 # Change Logs
 
+## v0.5.8
+
+ - prevent sending `submitOps` if websocket is disconnected
+
+
 ## v0.5.7
 
  - fix typo
