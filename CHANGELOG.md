@@ -1,5 +1,10 @@
 # Change Logs
 
+## v0.5.6
+
+ - monitor ops state and disconnect if submitop fails
+
+
 ## v0.5.5
 
  - sharehub: fix bug: error should be thrown if no handler registered.

@@ -8,12 +8,42 @@ sharehub = (o={}) ->
   @_create = o.create or null
   @_watch = o.watch or null
   @ews = o.ews
+
+  watchdog =
+    timeout: 20000
+    count: 0, hash: {}, hdr: null
+    fire: ~>
+      if watchdog.hdr =>
+        clearTimeout watchdog.hdr
+        watchdog.hdr = null
+      if @ews and @ews.disconnect and @ews.status and @ews.status! == 2 => @ews.disconnect!
+      watchdog.hash = {}
+    check: ->
+      [now, min] = [Date.now!, -1]
+      for k,v of @hash =>
+        if (now - v) >= @timeout => return @fire!
+        if min < 0 or (@timeout - (now - v)) < min => min = ((@timeout - (now - v)) >? 0)
+      if @hdr =>
+        clearTimeout @hdr
+        @hdr = null
+      if min >= 0 => @hdr = setTimeout (->@check!), min
+    track: ~>
+      if @ews and @ews.status and @ews.status! != 2 => return 0
+      tid = ++watchdog.count
+      watchdog.hash[tid] = Date.now!
+      if !watchdog.hdr => watchdog.hdr = setTimeout((~>watchdog.check!), watchdog.timeout)
+      return tid
+    untrack: (tid) ->
+      if !tid => return (->)
+      (e) ~> if e => @fire! else delete @hash[tid]
+
   hub.src.call @, {} <<< o <<< do
     ops-out: (ops) ~>
       _id = ops._id
       # DATA: we only have to apply if we decide to make a clone of remote obj when init
       #@data = json0.type.apply @data, ops
-      @doc.submitOp JSON.parse(JSON.stringify(ops))
+      tid = watchdog.track!
+      @doc.submitOp JSON.parse(JSON.stringify(ops)), watchdog.untrack(tid)
       # reflect to other subtree in hub
       @ops-in ops
     get: ~> @data
