@@ -26,7 +26,7 @@ sharehub = (o={}) ->
       if @hdr =>
         clearTimeout @hdr
         @hdr = null
-      if min >= 0 => @hdr = setTimeout (->@check!), min
+      if min >= 0 => @hdr = setTimeout (~>@check!), min
     track: ~>
       if @ews and @ews.status and @ews.status! != 2 => return 0
       tid = ++watchdog.count

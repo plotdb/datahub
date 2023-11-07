@@ -27,7 +27,7 @@
         return watchdog.hash = {};
       },
       check: function(){
-        var ref$, now, min, k, v, ref1$;
+        var ref$, now, min, k, v, ref1$, this$ = this;
         ref$ = [Date.now(), -1], now = ref$[0], min = ref$[1];
         for (k in ref$ = this.hash) {
           v = ref$[k];
@@ -44,7 +44,7 @@
         }
         if (min >= 0) {
           return this.hdr = setTimeout(function(){
-            return this.check();
+            return this$.check();
           }, min);
         }
       },
