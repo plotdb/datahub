@@ -1,0 +1,11 @@
+extends /base.pug
+block body
+  .my-5.mx-auto.w-640
+    .font-weight-bold tabhub test page
+    p to test tabhub, open this page in multiple tabs, and check if the edit in below textarea syncs across tabs.
+    textarea.form-control(ld="textarea",rows="10")
+block script
+  +script([
+  {name: "@plotdb/datahub", version: "dev", path: "tabhub.min.js"}
+  ])
+  script(type="module"): include:lsc index.ls
