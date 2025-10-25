@@ -16,6 +16,9 @@ echo "build src/tabhub.ls -> dist/tabhub.js ..."
 echo "minifying tabhub.js ..."
 ./node_modules/.bin/terser dist/tabhub.js > dist/tabhub.min.js
 
+cat dist/datahub.js dist/sharehub.js dist/tabhub.js > dist/index.js
+cat dist/datahub.min.js dist/sharehub.min.js dist/tabhub.min.js > dist/index.min.js
+
 #echo "browserifying datahub ..."
 #./node_modules/.bin/browserify --no-bf \
 #  --standalone datahub \
