@@ -1,5 +1,10 @@
 # Change Logs
 
+## v0.6.0 (upcoming)
+
+ - add tabhub
+
+
 ## v0.5.9
 
  - make watchdog timeout shorter

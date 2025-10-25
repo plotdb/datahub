@@ -197,6 +197,20 @@ You can pipe data source to a hub that is scoped, and pipe this scoped hub to th
      - `scope`: the `scope` used by hub, as defined above.
 
 
+## Tabhub
+
+Tabhub is a local-based hub that provides data sharing mechanism across browser tabs within a computer.
+
+Constructor options include all datahub's options, plus:
+
+ - `channelName`: optional channel name. default `default-channel`
+ - `initialData`: initial data. will be ignored if live data is available in broadcast channel.
+
+APIs: include all datahub's APIs, plus:
+
+ - `connect()`: connect to local tab group by the given channel name.
+
+
 ## License
 
 MIT

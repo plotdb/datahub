@@ -11,6 +11,11 @@ echo "build src/sharehub.ls -> dist/sharehub.js ..."
 echo "minifying sharehub.js ..."
 ./node_modules/.bin/terser dist/sharehub.js > dist/sharehub.min.js
 
+echo "build src/tabhub.ls -> dist/tabhub.js ..."
+./node_modules/.bin/lsc -cp --no-header src/tabhub.ls > dist/tabhub.js
+echo "minifying tabhub.js ..."
+./node_modules/.bin/terser dist/tabhub.js > dist/tabhub.min.js
+
 #echo "browserifying datahub ..."
 #./node_modules/.bin/browserify --no-bf \
 #  --standalone datahub \
