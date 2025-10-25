@@ -3,6 +3,8 @@
 ## v0.6.0 (upcoming)
 
  - add tabhub
+ - upgrade dependencies
+ - add `index.js` for hub bundles
 
 
 ## v0.5.9
