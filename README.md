@@ -206,9 +206,20 @@ Constructor options include all datahub's options, plus:
  - `channelName`: optional channel name. default `default-channel`
  - `initialData`: initial data. will be ignored if live data is available in broadcast channel.
 
+
 APIs: include all datahub's APIs, plus:
 
  - `connect()`: connect to local tab group by the given channel name.
+
+
+Sample usage:
+
+    hub = new tabhub({channelName: 'tabhub-test', initialData: content: "some simple text"})
+    <- hub.connect!then _
+    hub.as-des ops-in: -> /* ... call renderer to render content somewhere ... */
+    something.on 'update', -> hub.ops-out json0.diff ... /* try diff a ops to send */
+
+For demo check `web/static/tabhub/`.
 
 
 ## License
