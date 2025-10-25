@@ -1,5 +1,5 @@
 (function(){
-  var _datahub, _json0, tabhub, ref$;
+  var _datahub, _json0, tabhub, inlineProxise, ref$;
   _datahub = typeof module != 'undefined' && module !== null ? require("./datahub") : datahub;
   _json0 = (typeof module != 'undefined' && module !== null) && (typeof require != 'undefined' && require !== null) ? require("@plotdb/json0") : json0;
   tabhub = function(opt){
@@ -42,6 +42,18 @@
     };
     return this;
   };
+  inlineProxise = function(func, lc){
+    var f, ref$;
+    lc == null && (lc = {});
+    return f = (ref$ = function(){
+      func();
+      return new Promise(function(res, rej){
+        return lc.res = res, lc.rej = rej, lc;
+      });
+    }, ref$.resolve = function(){
+      return lc.res();
+    }, ref$);
+  };
   tabhub.broadcaster.prototype = (ref$ = Object.create(Object.prototype), ref$.data = function(it){
     if (arguments.length) {
       return this._.data = it;
@@ -65,7 +77,7 @@
           }, timeout);
         };
       }(opt);
-    ((ref$ = this._.proxise)[key$ = opt.action] || (ref$[key$] = [])).push(ret = proxise(func));
+    ((ref$ = this._.proxise)[key$ = opt.action] || (ref$[key$] = [])).push(ret = inlineProxise(func));
     this._.channel.postMessage((opt.src = this._.id, opt));
     return ret();
   }, ref$.hub = function(){
@@ -100,7 +112,7 @@
       } else if (action === 'data-requested') {
         this$.data(data);
       }
-      if (byAction && broadcaster.proxise[byAction]) {
+      if (byAction && this$._.proxise[byAction]) {
         return this$.resolve({
           action: byAction
         });

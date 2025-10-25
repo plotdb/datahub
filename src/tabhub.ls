@@ -23,12 +23,16 @@ tabhub.broadcaster = (opt = {}) ->
     hub: opt.hub
   @
 
+# a simple proxise implementation to inline proxise so we don't need an additional dependency
+inline-proxise = (func, lc = {}) ->
+  return f = (-> func!; return new Promise (res, rej) -> lc <<< {res, rej}) <<< resolve: -> lc.res!
+
 tabhub.broadcaster.prototype = Object.create(Object.prototype) <<<
   data: -> if arguments.length => @_.data = it else @_.data
   request: (opt = {}) ->
     func = if !opt.timeout => (->)
     else (({action,timeout}) ~> ~> setTimeout (~> @_.proxise[][action].splice(0).map (p) -> p.resolve!), timeout) opt
-    @_.proxise[][opt.action].push ret = proxise func
+    @_.proxise[][opt.action].push ret = inline-proxise func
     @_.channel.postMessage(opt <<< {src: @_.id})
     return ret!
   hub: -> @_.hub
@@ -47,7 +51,7 @@ tabhub.broadcaster.prototype = Object.create(Object.prototype) <<<
         @send {data: @data!, action: \data-requested, by-action: action, des: src}
       else if action == \data-requested =>
         @data data
-      if by-action and broadcaster.proxise[by-action] =>
+      if by-action and @_.proxise[by-action] =>
         @resolve {action: by-action}
     @request {action: \request-data, timeout: 100}
 
