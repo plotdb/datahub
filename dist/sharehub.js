@@ -80,9 +80,6 @@
     hub.src.call(this, import$(import$({}, o), {
       opsOut: function(ops){
         var _id, tid;
-        if (this$.ews.status() !== 2) {
-          return;
-        }
         _id = ops._id;
         tid = watchdog.track();
         this$.doc.submitOp(JSON.parse(JSON.stringify(ops)), watchdog.untrack(tid));
@@ -137,9 +134,7 @@
             id: o
           };
       }
-      force = !(o != null) || !(o.force != null)
-        ? true
-        : o.force;
+      force = !!(o != null && o.force);
       return Promise.resolve().then(function(){
         if (this$.sdb) {
           return this$.sdb.ensure();
@@ -150,8 +145,10 @@
         if (o != null) {
           this$.config(o);
         }
-        if (this$.doc && this$.doc.id === this$.id && this$.doc.collection === this$.collection && (o.force != null && !o.force)) {
-          return;
+        if (!force && this$.doc && this$.doc.id === this$.id && this$.doc.collection === this$.collection) {
+          return new Promise(function(res){
+            return this$.doc.whenNothingPending(res);
+          });
         }
         return (this$.doc
           ? this$.disconnect()
@@ -216,7 +213,7 @@
           }
         });
         sdb.on('close', function(){
-          return this$.disconnect();
+          return this$.fire('suspend');
         });
         if (this$.id && this$._initConnect) {
           return this$.connect();

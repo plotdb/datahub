@@ -39,8 +39,13 @@ sharehub = (o={}) ->
 
   hub.src.call @, {} <<< o <<< do
     ops-out: (ops) ~>
-      if @ews.status! != 2 => return
       _id = ops._id
+      # NOTE: we used to do this:
+      #     if @ews.status! != 2 => return
+      # this online check is no longer needed - when offline, submitOp queues ops
+      # into sharedb doc's pendingOps and they are flushed after reconnect.
+      # watchdog.track already returns 0 (untracked) when offline,
+      # which is correct since there is no ack to wait for.
       # DATA: we only have to apply if we decide to make a clone of remote obj when init
       #@data = json0.type.apply @data, ops
       tid = watchdog.track!
@@ -69,15 +74,22 @@ sharehub.prototype = {} <<< hub.src.prototype <<< do
 
   connect: (o) ->
     if o? => o = (if typeof(o) == \object => o else {id: o})
-    force = if !(o?) or !(o.force?) => true else o.force
+    force = !!(o? and o.force)
     Promise.resolve!
       .then ~> if @sdb => @sdb.ensure! else @init!
       .then ~>
         if o? => @config o
-        if @doc and
+        # same doc: it survived disconnection with pendingOps intact.
+        # after bindToSocket (done in sdb.ensure), sharedb resubscribes
+        # (catch-up by version) and flushes pending / inflight ops
+        # (deduped by src/seq on server) by itself.
+        # here we only wait until local and remote converge.
+        # pass {force: true} to explicitly discard the doc and refetch.
+        if !force and
+           @doc and
            @doc.id == @id and
-           @doc.collection == @collection
-           and ((o.force?) and !o.force) => return
+           @doc.collection == @collection =>
+          return new Promise (res) ~> @doc.whenNothingPending res
         (if @doc => @disconnect! else Promise.resolve!)
           .then ~>
             @sdb.get do
@@ -107,7 +119,10 @@ sharehub.prototype = {} <<< hub.src.prototype <<< do
         sdb.on \error, (e) ~>
           if !@evthdr.[]error.length => throw e.err
           else @fire \error, e.err
-        sdb.on \close, ~> @disconnect!
+        # NOTE: we used to `@disconnect!` here, which destroys doc along with
+        # its pendingOps - any offline edit was lost. doc must survive
+        # disconnection; sharedb resyncs it after reconnect (bindToSocket).
+        sdb.on \close, ~> @fire \suspend
         if @id and @_init-connect => @connect!
       .then ~> {sdb: @sdb}
 
