@@ -7,6 +7,7 @@
    - socket close no longer destroys the doc ( changes v0.5.3 "always disconnect if sdb-client closed" ). a `suspend` event is fired instead; the doc resyncs by itself after reconnect.
    - `connect`: when target doc is unchanged, wait until local and remote converge ( `whenNothingPending` ) instead of destroy + refetch. `force` now defaults to false; pass `{force: true}` explicitly for the old discard-and-refetch behavior.
  - requires `@plotdb/ews` >= 0.2.0 ( persistent sharedb connection ).
+ - upgrade dependencies
 
 
 ## v0.6.0
