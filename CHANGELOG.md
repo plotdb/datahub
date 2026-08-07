@@ -2,6 +2,10 @@
 
 ## v0.7.0
 
+ - **BREAKING** ( behavioral; api signatures unchanged ):
+   - `open` is no longer fired when reconnecting to the same doc - the doc survives and converges instead. ui that re-initializes from `get()` on every `open` will silently stop doing so; listen to `suspend`, or pass `{force: true}` to restore the old discard-and-refetch behavior.
+   - `close` is no longer fired on socket close ( only on explicit `disconnect` ). listen to `suspend` for connection loss.
+   - `get()` no longer returns null while disconnected - the doc ( and its data ) stays alive. code using null-check as offline detection will not trigger anymore.
  - sharehub: keep sharedb doc alive across disconnection, so offline edits are no longer lost:
    - `ops-out` no longer drops ops when websocket is disconnected ( reverts v0.5.8 ). `submitOp` queues ops into sharedb doc's pendingOps and they are flushed after reconnect.
    - socket close no longer destroys the doc ( changes v0.5.3 "always disconnect if sdb-client closed" ). a `suspend` event is fired instead; the doc resyncs by itself after reconnect.
