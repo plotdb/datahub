@@ -141,11 +141,16 @@ APIs:
      - an object with fields:
        - `id`: sharedb id. use stored `id` if omitted. this id will be stored for future use. (e.g., auto-reconnect)
        - `collection`: `doc` if omitted.
-       - `force`: default true. when true, force to reconnect even if `id` / `collection` is the same.
-          - when `opt` is a string or omitted, `force` will also be true.
+       - `force`: default false. when true, discard the current doc and refetch, even if `id` / `collection` is the same.
+   - when the target doc is unchanged ( and `force` is not set ), the doc has
+     survived disconnection with its pending ops intact - `connect` simply
+     waits until local and remote converge ( sharedb resubscribes and flushes
+     pending ops by itself after the underlying connection is rebound ).
    - if `id` / `collection` are provided in `opt`, they will be stored internal for future use.
- - `disconnect()`: disconnect current doc from sharedb. return Promise, resolved when disconnected.
-   - this will be automatically called when internal `sdb-client` is closed.
+ - `disconnect()`: discard current doc from sharedb. return Promise, resolved when disconnected.
+   - note this destroys the doc along with any unacknowledged local ops.
+     it is no longer called automatically on socket close - the doc survives
+     disconnection and resyncs after reconnect.
  - `config(opt)`: update configuration. opt has following fields:
    - `id`: sharedb id.
    - `collection`: `doc` if omitted.
@@ -153,7 +158,9 @@ APIs:
 Additionally, `sharehub` fire following events
 
  - `open`: fired when a connect is successfully done.
- - `close`: fired when `disconnect` is called.
+ - `suspend`: fired when the underlying socket is closed or declared dead while the doc is kept alive.
+   - edits made while suspended are queued in the doc's pending ops and flushed after reconnect. useful for driving an "unsynced changes" hint in ui ( see also `doc.hasPending()` ).
+ - `close`: fired when `disconnect` is called ( doc destroyed ).
  - `error`: fired when internal sdb-client object fires error events.
 
 
