@@ -86,17 +86,53 @@ datahub.prototype = Object.create(Object.prototype) <<< do
     _id = ops._id
     ops-addon = []
     data = @get!
+    # paths we already queued a node for. `data` is not updated as we go, so
+    # without this two ops sharing a missing ancestor each queue their own
+    # `{oi: {}}` for it - and the second one wipes the intermediate node the
+    # first one just built. the real op then lands on a path that no longer
+    # exists and `apply` throws.
+    created = {}
     ops.map (op) ~>
       d = data
       p = []
-      # TODO support creationg of different type object
+      # TODO support creation of different types. an array element still gets
+      # created as `{oi: {}}`, which `apply` rejects ( "Referenced element not
+      # an object" ) - it needs `li`. only objects and, below, strings work.
       for i from 0 til op.p.length - 1 =>
         p.push op.p[i]
-        if !(d[op.p[i]]?) =>
+        key = p.join '\u0000'
+        if !(d[op.p[i]]?) and !created[key] =>
+          created[key] = true
+          # `length - 2` is the last turn of this loop, and what it creates
+          # differs by op kind. for `oi` / `od` the path is
+          # `[...ancestors, key]`, so the last turn builds the container the
+          # target sits in - an object. for `si` / `sd` the path is
+          # `[...ancestors, field, position]`: the final segment is a character
+          # offset, not a key, so the last turn builds the string ITSELF.
+          #
+          # two bugs used to live here. the index was tested against
+          # `length - 1`, which this loop never reaches, so the branch was dead
+          # and string fields were created as `{}` - `apply` then failed with
+          # "s1.slice is not a function". and the branch it guarded created the
+          # node with `si: ""`, which is not a creation primitive at all: `si`
+          # inserts into a string that already exists and needs a position at
+          # the end of its path, so `apply` rejects it with "component missing
+          # position field". `oi` is the primitive that brings a key into
+          # existence; `oi: ""` gives it the empty string.
+          #
+          # NOTE both branches emit an `oi` with no `od`, so a concurrent write
+          # to the same path transforms this whole op sequence away silently.
+          # that is inherent to creating a node we believe is absent, not new
+          # here - but it means `addon` is only safe where the caller's snapshot
+          # is the same one the ops were derived from.
           ops-addon.push {
             p: JSON.parse(JSON.stringify(p))
-          } <<< if i == op.p.length - 1 and op.si => (si: "") else (oi: {})
-        d = d[op.p[i]] or {}
+          } <<< if i == op.p.length - 2 and op.si => (oi: "") else (oi: {})
+        # `?` rather than `or`, purely so both tests use the same notion of
+        # "present". no behaviour depends on it: a falsy-but-present node
+        # ( '', 0 ) cannot have children, so it never appears mid-path in a
+        # valid op. consistency, not a fix.
+        d = if d[op.p[i]]? => d[op.p[i]] else {}
     ops = ops-addon ++ ops
     ops._id = _id
     return ops
