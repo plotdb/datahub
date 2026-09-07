@@ -130,6 +130,10 @@ Constructor options:
    - when omitted, a creator function returing an empty object is used.
  - `watch(ops, src)`: watcher function. optional
  - `ews`: `@plotdb/ews` instance to use. required.
+ - `settle`: how long ( ms ) `connect` may wait for the queue to drain when
+   reconnecting to an unchanged doc. default 10000. set 0 to skip the wait
+   entirely and resolve as soon as the connection is rebound. see `connect`
+   below for why this is bounded.
 
 
 APIs:
@@ -143,9 +147,19 @@ APIs:
        - `collection`: `doc` if omitted.
        - `force`: default false. when true, discard the current doc and refetch, even if `id` / `collection` is the same.
    - when the target doc is unchanged ( and `force` is not set ), the doc has
-     survived disconnection with its pending ops intact - `connect` simply
-     waits until local and remote converge ( sharedb resubscribes and flushes
-     pending ops by itself after the underlying connection is rebound ).
+     survived disconnection with its pending ops intact - `connect` waits until
+     local and remote converge ( sharedb resubscribes and flushes pending ops
+     by itself after the underlying connection is rebound ), or until `settle`
+     elapses, whichever comes first.
+   - the wait is bounded because converging is not in our hands: it happens
+     when the server acknowledges the queued ops, and a server that stops
+     acknowledging them makes it never happen at all. waiting indefinitely
+     protects nothing - the doc and its pending ops survive either way, and
+     sharedb keeps retrying - it only leaves the caller unable to tell that the
+     connection came back, which in turn keeps any "reconnect in progress"
+     state of theirs stuck forever.
+   - so a `connect` that resolves means the connection is usable, not that
+     everything has been saved. use `doc.hasPending()` to tell those apart.
    - if `id` / `collection` are provided in `opt`, they will be stored internal for future use.
  - `disconnect()`: discard current doc from sharedb. return Promise, resolved when disconnected.
    - note this destroys the doc along with any unacknowledged local ops.
@@ -191,6 +205,14 @@ You can pipe data source to a hub that is scoped, and pipe this scoped hub to th
  - `get()`: return a snapshot of source data
  - `pipe(hub)`: pipe down events to `hub`.
  - `addon(ops)`: prepend `ops` to create node for ops accessing non-existed path
+   - nodes are created as objects, except the target of a string op ( `si` /
+     `sd` ), whose path ends in a character position rather than a key - that
+     one is created as an empty string.
+   - array elements are not supported: an element on a missing path is created
+     as an object, which `apply` rejects ( it needs `li` ).
+   - the created nodes are `oi` without `od`, so a concurrent write to the same
+     path transforms the whole sequence away. `addon` is only safe where the
+     snapshot it reads is the same one the ops were derived from.
  - `cut(hub)`: remove `hub` from current object's subscriber list.
  - `state(s)`: change state. s can be either `opened` or `closed`.
    - state propagates automatically. Should only be used by source hub.
