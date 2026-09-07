@@ -8,6 +8,10 @@ sharehub = (o={}) ->
   @_create = o.create or null
   @_watch = o.watch or null
   @ews = o.ews
+  # o.settle - how long `connect` may wait for the queue to drain on reconnect
+  # ( ms ). see `connect` for why this has to be bounded. 0 disables the wait
+  # entirely; default 10000.
+  @_settle = if o.settle? => o.settle else 10000
 
   watchdog =
     timeout: 13000
@@ -89,7 +93,35 @@ sharehub.prototype = {} <<< hub.src.prototype <<< do
            @doc and
            @doc.id == @id and
            @doc.collection == @collection =>
-          return new Promise (res) ~> @doc.whenNothingPending res
+          # `whenNothingPending` waits on a condition only the server can
+          # satisfy: it fires when the queue drains, and if the server stops
+          # acknowledging ops it never fires at all. Waiting here indefinitely
+          # protects nothing - the doc and its pendingOps survive either way,
+          # and sharedb keeps retrying on its own - it only prevents the caller
+          # from ever learning that the reconnect finished.
+          #
+          # That is not theoretical. @servebase/connector marks a reconnect in
+          # progress with `_running` and clears it when `connect` settles;
+          # hanging here left it set forever, so every later disconnection was
+          # swallowed at `reopen`'s first line and no cover was ever summoned -
+          # socket reported up, nothing retrying, ops going nowhere, and not one
+          # thing on screen to say so.
+          #
+          # So resolve on a timeout too. Draining is the good outcome, not a
+          # precondition: the caller gets told the connection is back, and it is
+          # the caller's business ( `hasPending` is public ) to decide what to
+          # say about a queue that is still full.
+          if !@_settle => return Promise.resolve!
+          return new Promise (res) ~>
+            hdr = setTimeout (~>
+              hdr := null
+              res!
+            ), @_settle
+            @doc.whenNothingPending ~>
+              if !hdr => return
+              clearTimeout hdr
+              hdr := null
+              res!
         (if @doc => @disconnect! else Promise.resolve!)
           .then ~>
             @sdb.get do

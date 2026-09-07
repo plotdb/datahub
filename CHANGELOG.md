@@ -1,5 +1,12 @@
 # Change Logs
 
+## unreleased
+
+ - sharehub: `connect` no longer waits forever for the queue to drain on reconnect. when the target doc is unchanged it waits on `whenNothingPending`, a condition only the server can satisfy - if the server stops acknowledging ops it never fires, and `connect` never settles. callers that track a reconnect in progress ( e.g. `@servebase/connector`'s `_running` ) were left stuck with no way out, swallowing every later disconnection. the wait is now bounded by the new `settle` option ( ms, default 10000; 0 to skip the wait ); on timeout `connect` resolves with the doc and its pendingOps untouched, and sharedb keeps retrying by itself.
+ - datahub: `addon` creates string fields with `oi: ""` instead of `{}`. the `si` branch was guarded by an index this loop never reaches, so `si` ops onto a missing field got an object to insert into and `apply` failed with "s1.slice is not a function".
+ - datahub: `addon` no longer queues a node twice when two ops share a missing ancestor - the duplicate wiped the subtree the first op had just built, and ops on separate branches failed with "Cannot read properties of undefined".
+
+
 ## v0.7.0
 
  - **BREAKING** ( behavioral; api signatures unchanged ):

@@ -348,6 +348,7 @@
     this._create = o.create || null;
     this._watch = o.watch || null;
     this.ews = o.ews;
+    this._settle = o.settle != null ? o.settle : 10000;
     watchdog = {
       timeout: 13000,
       count: 0,
@@ -483,8 +484,23 @@
           this$.config(o);
         }
         if (!force && this$.doc && this$.doc.id === this$.id && this$.doc.collection === this$.collection) {
+          if (!this$._settle) {
+            return Promise.resolve();
+          }
           return new Promise(function(res){
-            return this$.doc.whenNothingPending(res);
+            var hdr;
+            hdr = setTimeout(function(){
+              hdr = null;
+              return res();
+            }, this$._settle);
+            return this$.doc.whenNothingPending(function(){
+              if (!hdr) {
+                return;
+              }
+              clearTimeout(hdr);
+              hdr = null;
+              return res();
+            });
           });
         }
         return (this$.doc
