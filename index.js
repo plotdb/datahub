@@ -150,29 +150,34 @@
       return this._.src.opsOut(ops);
     },
     addon: function(ops){
-      var _id, opsAddon, data;
+      var _id, opsAddon, data, created;
       _id = ops._id;
       opsAddon = [];
       data = this.get();
+      created = {};
       ops.map(function(op){
-        var d, p, i$, to$, i, results$ = [];
+        var d, p, i$, to$, i, key, results$ = [];
         d = data;
         p = [];
         for (i$ = 0, to$ = op.p.length - 1; i$ < to$; ++i$) {
           i = i$;
           p.push(op.p[i]);
-          if (!(d[op.p[i]] != null)) {
+          key = p.join('\u0000');
+          if (!(d[op.p[i]] != null) && !created[key]) {
+            created[key] = true;
             opsAddon.push(import$({
               p: JSON.parse(JSON.stringify(p))
-            }, i === op.p.length - 1 && op.si
+            }, i === op.p.length - 2 && op.si
               ? {
-                si: ""
+                oi: ""
               }
               : {
                 oi: {}
               }));
           }
-          results$.push(d = d[op.p[i]] || {});
+          results$.push(d = d[op.p[i]] != null
+            ? d[op.p[i]]
+            : {});
         }
         return results$;
       });
@@ -343,6 +348,7 @@
     this._create = o.create || null;
     this._watch = o.watch || null;
     this.ews = o.ews;
+    this._settle = o.settle != null ? o.settle : 10000;
     watchdog = {
       timeout: 13000,
       count: 0,
@@ -478,8 +484,23 @@
           this$.config(o);
         }
         if (!force && this$.doc && this$.doc.id === this$.id && this$.doc.collection === this$.collection) {
+          if (!this$._settle) {
+            return Promise.resolve();
+          }
           return new Promise(function(res){
-            return this$.doc.whenNothingPending(res);
+            var hdr;
+            hdr = setTimeout(function(){
+              hdr = null;
+              return res();
+            }, this$._settle);
+            return this$.doc.whenNothingPending(function(){
+              if (!hdr) {
+                return;
+              }
+              clearTimeout(hdr);
+              hdr = null;
+              return res();
+            });
           });
         }
         return (this$.doc

@@ -1,7 +1,18 @@
 # Change Logs
 
+## v0.7.1
+
+ - sharehub: `connect` no longer waits forever for the queue to drain on reconnect. when the target doc is unchanged it waits on `whenNothingPending`, a condition only the server can satisfy - if the server stops acknowledging ops it never fires, and `connect` never settles. callers that track a reconnect in progress ( e.g. `@servebase/connector`'s `_running` ) were left stuck with no way out, swallowing every later disconnection. the wait is now bounded by the new `settle` option ( ms, default 10000; 0 to skip the wait ); on timeout `connect` resolves with the doc and its pendingOps untouched, and sharedb keeps retrying by itself.
+ - datahub: `addon` creates string fields with `oi: ""` instead of `{}`. the `si` branch was guarded by an index this loop never reaches, so `si` ops onto a missing field got an object to insert into and `apply` failed with "s1.slice is not a function".
+ - datahub: `addon` no longer queues a node twice when two ops share a missing ancestor - the duplicate wiped the subtree the first op had just built, and ops on separate branches failed with "Cannot read properties of undefined".
+
+
 ## v0.7.0
 
+ - **BREAKING** ( behavioral; api signatures unchanged ):
+   - `open` is no longer fired when reconnecting to the same doc - the doc survives and converges instead. ui that re-initializes from `get()` on every `open` will silently stop doing so; listen to `suspend`, or pass `{force: true}` to restore the old discard-and-refetch behavior.
+   - `close` is no longer fired on socket close ( only on explicit `disconnect` ). listen to `suspend` for connection loss.
+   - `get()` no longer returns null while disconnected - the doc ( and its data ) stays alive. code using null-check as offline detection will not trigger anymore.
  - sharehub: keep sharedb doc alive across disconnection, so offline edits are no longer lost:
    - `ops-out` no longer drops ops when websocket is disconnected ( reverts v0.5.8 ). `submitOp` queues ops into sharedb doc's pendingOps and they are flushed after reconnect.
    - socket close no longer destroys the doc ( changes v0.5.3 "always disconnect if sdb-client closed" ). a `suspend` event is fired instead; the doc resyncs by itself after reconnect.
