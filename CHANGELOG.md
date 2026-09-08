@@ -1,5 +1,10 @@
 # Change Logs
 
+## v0.7.4
+
+ - reject sharedb.connect only if status is not connected/connecting
+
+
 ## v0.7.3
 
  - fix bug: Promise for waiting doc.whenNothingPending isn't returned.
