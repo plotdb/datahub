@@ -127,8 +127,8 @@ sharehub.prototype = {} <<< hub.src.prototype <<< do
           # while it may be good even if there are pending ops (after waited for settle sce)
           # connection might already drop during waiting, so we check it again.
           return ret.then ~>
-            if @doc?connection?state != \connected => return lderror.reject 1011
-            if @ews.status! != 2 => return lderror.reject 1011
+            # note: doc may still connecting.
+            if !(@ews.status! == 2 and @doc?connection?state != \disconnected) => return lderror.reject 1011
 
         (if @doc => @disconnect! else Promise.resolve!)
           .then ~>

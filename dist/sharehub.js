@@ -167,10 +167,7 @@
           });
           return ret.then(function(){
             var ref$, ref1$;
-            if (((ref$ = this$.doc) != null ? (ref1$ = ref$.connection) != null ? ref1$.state : void 8 : void 8) !== 'connected') {
-              return lderror.reject(1011);
-            }
-            if (this$.ews.status() !== 2) {
+            if (!(this$.ews.status() === 2 && ((ref$ = this$.doc) != null ? (ref1$ = ref$.connection) != null ? ref1$.state : void 8 : void 8) !== 'disconnected')) {
               return lderror.reject(1011);
             }
           });
