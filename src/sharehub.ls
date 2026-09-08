@@ -60,7 +60,7 @@ sharehub = (o={}) ->
       @doc.submitOp JSON.parse(JSON.stringify(ops)), watchdog.untrack(tid)
       # reflect to other subtree in hub
       @ops-in ops
-    get: ~> @data
+    get: ~> @doc?data
   @
 
 sharehub.prototype = {} <<< hub.src.prototype <<< do
@@ -126,7 +126,7 @@ sharehub.prototype = {} <<< hub.src.prototype <<< do
           # connect should only resolve if connection is good
           # while it may be good even if there are pending ops (after waited for settle sce)
           # connection might already drop during waiting, so we check it again.
-          ret.then ~>
+          return ret.then ~>
             if @doc?connection?state != \connected => return lderror.reject 1011
             if @ews.status! != 2 => return lderror.reject 1011
 
@@ -140,6 +140,10 @@ sharehub.prototype = {} <<< hub.src.prototype <<< do
           .then (doc) ~>
             # DATA: We pass raw data now, but if we want to clone:
             # @data = JSON.parse(JSON.stringify(doc.data))
+            # `get` reads through to `doc.data`; this held copy is kept only so existing
+            # consumers of `hub.data` keep working. It CAN go stale - sharedb replaces
+            # `doc.data` on hard rollback + refetch - so nothing in here should read it.
+            # see `get:` above.
             @ <<< doc: doc, data: doc.data
             @fire \open
 

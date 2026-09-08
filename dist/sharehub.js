@@ -85,7 +85,8 @@
         return this$.opsIn(ops);
       },
       get: function(){
-        return this$.data;
+        var ref$;
+        return (ref$ = this$.doc) != null ? ref$.data : void 8;
       }
     }));
     return this;
@@ -164,7 +165,7 @@
               return res();
             });
           });
-          ret.then(function(){
+          return ret.then(function(){
             var ref$, ref1$;
             if (((ref$ = this$.doc) != null ? (ref1$ = ref$.connection) != null ? ref1$.state : void 8 : void 8) !== 'connected') {
               return lderror.reject(1011);
