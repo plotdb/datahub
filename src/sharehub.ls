@@ -37,9 +37,13 @@ sharehub = (o={}) ->
       watchdog.hash[tid] = Date.now!
       if !watchdog.hdr => watchdog.hdr = setTimeout((~>watchdog.check!), watchdog.timeout)
       return tid
-    untrack: (tid) ->
-      if !tid => return (->)
-      (e) ~> if e => @fire! else delete @hash[tid]
+    untrack: (tid) ~>
+      (e) ~>
+        if tid => delete watchdog.hash[tid]
+        if !e => return
+        watchdog.fire!
+        @fire \error, e
+
 
   hub.src.call @, {} <<< o <<< do
     ops-out: (ops) ~>
@@ -112,16 +116,20 @@ sharehub.prototype = {} <<< hub.src.prototype <<< do
           # the caller's business ( `hasPending` is public ) to decide what to
           # say about a queue that is still full.
           if !@_settle => return Promise.resolve!
-          return new Promise (res) ~>
-            hdr = setTimeout (~>
-              hdr := null
-              res!
-            ), @_settle
+          ret = new Promise (res, rej) ~>
+            hdr = setTimeout (~> hdr := null; res!), @_settle
             @doc.whenNothingPending ~>
               if !hdr => return
               clearTimeout hdr
               hdr := null
               res!
+          # connect should only resolve if connection is good
+          # while it may be good even if there are pending ops (after waited for settle sce)
+          # connection might already drop during waiting, so we check it again.
+          ret.then ~>
+            if @doc?connection?state != \connected => return lderror.reject 1011
+            if @ews.status! != 2 => return lderror.reject 1011
+
         (if @doc => @disconnect! else Promise.resolve!)
           .then ~>
             @sdb.get do
