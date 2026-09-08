@@ -1,5 +1,11 @@
 # Change Logs
 
+## v0.7.2
+
+ - fire error when watchdog fire
+ - reject if socket/doc are still disconnected after sharedb connect
+
+
 ## v0.7.1
 
  - sharehub: `connect` no longer waits forever for the queue to drain on reconnect. when the target doc is unchanged it waits on `whenNothingPending`, a condition only the server can satisfy - if the server stops acknowledging ops it never fires, and `connect` never settles. callers that track a reconnect in progress ( e.g. `@servebase/connector`'s `_running` ) were left stuck with no way out, swallowing every later disconnection. the wait is now bounded by the new `settle` option ( ms, default 10000; 0 to skip the wait ); on timeout `connect` resolves with the doc and its pendingOps untouched, and sharedb keeps retrying by itself.

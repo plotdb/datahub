@@ -64,17 +64,15 @@
         return tid;
       },
       untrack: function(tid){
-        var this$ = this;
-        if (!tid) {
-          return function(){};
-        }
         return function(e){
-          var ref$, ref1$;
-          if (e) {
-            return this$.fire();
-          } else {
-            return ref1$ = (ref$ = this$.hash)[tid], delete ref$[tid], ref1$;
+          if (tid) {
+            delete watchdog.hash[tid];
           }
+          if (!e) {
+            return;
+          }
+          watchdog.fire();
+          return this$.fire('error', e);
         };
       }
     };
@@ -143,6 +141,7 @@
           return this$.init();
         }
       }).then(function(){
+        var ret;
         if (o != null) {
           this$.config(o);
         }
@@ -150,7 +149,7 @@
           if (!this$._settle) {
             return Promise.resolve();
           }
-          return new Promise(function(res){
+          ret = new Promise(function(res, rej){
             var hdr;
             hdr = setTimeout(function(){
               hdr = null;
@@ -164,6 +163,15 @@
               hdr = null;
               return res();
             });
+          });
+          ret.then(function(){
+            var ref$, ref1$;
+            if (((ref$ = this$.doc) != null ? (ref1$ = ref$.connection) != null ? ref1$.state : void 8 : void 8) !== 'connected') {
+              return lderror.reject(1011);
+            }
+            if (this$.ews.status() !== 2) {
+              return lderror.reject(1011);
+            }
           });
         }
         return (this$.doc
