@@ -1,5 +1,11 @@
 # Change Logs
 
+## v0.7.3
+
+ - fix bug: Promise for waiting doc.whenNothingPending isn't returned.
+ - get should return doc.data in case doc.data is changed.
+
+
 ## v0.7.2
 
  - fire error when watchdog fire
