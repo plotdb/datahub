@@ -2,7 +2,8 @@ hub = if module? => require("./datahub") else datahub
 
 sharehub = (o={}) ->
   @evthdr = {}
-  @data = {}
+  # NOTE: we used to `@data={}` here, however it should be a read-through accessor to sdb.
+  # so we now use @data getter for accessing sdb.data directly now.
   @config o
   @_init-connect = if o.init-connect? => o.init-connect else true
   @_create = o.create or null
@@ -138,20 +139,21 @@ sharehub.prototype = {} <<< hub.src.prototype <<< do
               create: if @_create => (~> @_create!) else (->{})
               watch: (...args) ~> @watch.apply @, args
           .then (doc) ~>
-            # DATA: We pass raw data now, but if we want to clone:
-            # @data = JSON.parse(JSON.stringify(doc.data))
-            # `get` reads through to `doc.data`; this held copy is kept only so existing
-            # consumers of `hub.data` keep working. It CAN go stale - sharedb replaces
-            # `doc.data` on hard rollback + refetch - so nothing in here should read it.
-            # see `get:` above.
-            @ <<< doc: doc, data: doc.data
+            # when sharedb refetch its document, it fires `load`
+            # this may be caused by data conflict or sync issue.
+            # ( note inflight / pending ops may be dropped )
+            # more importantly, our user should be notified to update their local copy
+            # thus, a reload event is fired for this purpose.
+            doc.on \load, ~> if @doc == doc => @fire \reload
+            # /* @data = doc.get! */:  we used to set data here but now getter are used.
+            @doc = doc
             @fire \open
 
   disconnect: ->
     if !@doc => return Promise.resolve!
     (res, rej) <~ new Promise _
     <~ @doc.destroy _
-    @ <<< {doc: null, data: null}
+    @doc = null
     @fire \close
     res!
 
@@ -169,6 +171,12 @@ sharehub.prototype = {} <<< hub.src.prototype <<< do
         sdb.on \close, ~> @fire \suspend
         if @id and @_init-connect => @connect!
       .then ~> {sdb: @sdb}
+
+# we used to assign @data directly from `doc.get!` - yet once doc updated, our status diverge.
+# use getter to avoid this.
+Object.defineProperty sharehub.prototype, \data, do
+  configurable: true
+  get: -> @doc?data
 
 if module? => module.exports = sharehub
 else if window? => window.sharehub = sharehub
