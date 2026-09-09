@@ -169,11 +169,20 @@ APIs:
    - `id`: sharedb id.
    - `collection`: `doc` if omitted.
 
+Properties:
+
+ - `data`: the live doc data same as `get()`. `undefined` until the first `connect` resolves.
+   - it is an accessor to doc data and is the current tree, not yours. Clone it before editing it. See `reload` below.
+
 Additionally, `sharehub` fire following events
 
  - `open`: fired when a connect is successfully done.
  - `suspend`: fired when the underlying socket is closed or declared dead while the doc is kept alive.
    - edits made while suspended are queued in the doc's pending ops and flushed after reconnect. useful for driving an "unsynced changes" hint in ui ( see also `doc.hasPending()` ).
+ - `reload`: fired when sharedb discarded the document and refetched it, replacing `doc.data` with a new object.
+   - *NOTE* you should always drop the old data copy and reinit by calling `get()` to maintain sync.
+   - This happens on a hard rollback: a remote op that would not apply, or a transform that failed. sharedb recovers on its own, but it does so by throwing the old tree away.
+   - In this case, pending edits are gone. Consider implementing a recovery plan if needed
  - `close`: fired when `disconnect` is called ( doc destroyed ).
  - `error`: fired when internal sdb-client object fires error events.
 

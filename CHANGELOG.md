@@ -1,5 +1,11 @@
 # Change Logs
 
+## v0.7.5
+
+ - sharehub: new `reload` event, fired when sharedb discarded the document and refetched it ( hard rollback: a remote op that would not apply, or a failed transform ). `ingestSnapshot` assigns a brand new object to `doc.data`, and no op describes that swap - so any copy taken from `get()` beforehand becomes an orphan that receives nothing further. consumers that also diff their copy to produce ops were pushing that stale tree back out over the version just fetched. on `reload`, drop what you hold and re-read `get()`.
+ - sharehub: `data` is now a read-through accessor for `doc.data` rather than a copy assigned at connect time. same value as `get()`, and no longer capable of going stale. it is `undefined` before the first connect, as `get()` has always been.
+
+
 ## v0.7.4
 
  - reject sharedb.connect only if status is not connected/connecting

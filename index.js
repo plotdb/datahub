@@ -342,7 +342,6 @@
     var watchdog, this$ = this;
     o == null && (o = {});
     this.evthdr = {};
-    this.data = {};
     this.config(o);
     this._initConnect = o.initConnect != null ? o.initConnect : true;
     this._create = o.create || null;
@@ -533,8 +532,12 @@
             }
           });
         }).then(function(doc){
+          doc.on('load', function(){
+            if (this$.doc === doc) {
+              return this$.fire('reload');
+            }
+          });
           this$.doc = doc;
-          this$.data = doc.data;
           return this$.fire('open');
         });
       });
@@ -547,7 +550,6 @@
       return new Promise(function(res, rej){
         return this$.doc.destroy(function(){
           this$.doc = null;
-          this$.data = null;
           this$.fire('close');
           return res();
         });
@@ -582,6 +584,13 @@
           sdb: this$.sdb
         };
       });
+    }
+  });
+  Object.defineProperty(sharehub.prototype, 'data', {
+    configurable: true,
+    get: function(){
+      var ref$;
+      return (ref$ = this.doc) != null ? ref$.data : void 8;
     }
   });
   if (typeof module != 'undefined' && module !== null) {
